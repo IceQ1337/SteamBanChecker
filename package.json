@@ -1,0 +1,21 @@
+{
+  "name": "steambanchecker",
+  "version": "1.0.0",
+  "description": "Periodically checks given steam-profiles for various bans and informs you via telegram bot.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+   "repository": {
+    "type": "git",
+    "url": "git://github.com/IceQ1337/SteamBanChecker.git"
+  },
+  "author": "IceQ1337",
+  "license": "MIT",
+  "dependencies": {
+    "nedb": "^1.8.0",
+    "request": "^2.88.0",
+    "telegram-bot-api": "^1.3.3"
+  }
+}

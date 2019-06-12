@@ -1,0 +1,10 @@
+{
+	"Steam": {
+		"apiKey": "STEAM API KEY",
+		"checkInterval": 15
+	},
+	"Telegram": {
+		"botToken": "Telegram Bot Token",
+		"masterChatID": "Telegram Chat ID"
+	}
+}
