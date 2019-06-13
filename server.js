@@ -83,22 +83,24 @@ TelegramBot.on('message', (message) => {
             if (msg == '/start') {
                 sendTelegramMessage(Language.userStartInfo, chatID);
             } else if (msg == '/request') {
-                var inlineKeyboard = {
-                    inline_keyboard: [
-                        [
-                            {
-                                text: Language.buttonAccept,
-                                callback_data: `user-accept-${chatID}`
-                            },
-                            {
-                                text: Language.buttonDeny,
-                                callback_data: `user-deny-${chatID}`
-                            }
+                if (Config.General.allowRequests) {
+                    var inlineKeyboard = {
+                        inline_keyboard: [
+                            [
+                                {
+                                    text: Language.buttonAccept,
+                                    callback_data: `user-accept-${chatID}`
+                                },
+                                {
+                                    text: Language.buttonDeny,
+                                    callback_data: `user-deny-${chatID}`
+                                }
+                            ]
                         ]
-                    ]
-                };
-                sendTelegramMessage(Language.userRequestSend, chatID);
-                sendTelegramMessageAcceptDeny(`${username} ${Language.userRequestSendMaster}`, inlineKeyboard);
+                    };
+                    sendTelegramMessage(Language.userRequestSend, chatID);
+                    sendTelegramMessageAcceptDeny(`${username} ${Language.userRequestSendMaster}`, inlineKeyboard);
+                }
             }
         }
     })

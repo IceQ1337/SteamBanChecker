@@ -1,5 +1,6 @@
 {
 	"General": {
+		"allowRequests": true,
 		"language": "en",
 		"checkInterval": 15
 	},

@@ -26,6 +26,7 @@ In order to use this bot, you need the following dependencies and tokens:
 ```Javascript
 {
 	"General": {
+		"allowRequests": true, // Allow telegram users to /request access
 		"language": "en", // Language Code (must match a file in the localization folder)
 		"checkInterval": 15 // Check-Interval in Minutes
 	},
@@ -46,6 +47,10 @@ In order to use this bot, you need the following dependencies and tokens:
 
 To get the steamID64 or URL of a profile you can use websites like [STEAMID I/O](https://steamid.io/).  
 Adding a profile via customURL will **NOT** work!
+
+**Adding Users**
+While `allowRequests` is true, everyone can `/request` access to the script and you can either accept or decline the request.  
+Accepted users can `/add` their own profiles. You will not be notified about this.
 
 **How It Operates**
 - The script will check every profile that gets added to the list once to get its initial data.
