@@ -31,6 +31,8 @@ function sendTelegramMessage(message) {
         chat_id: Config.Telegram.masterChatID,
         text: message,
         parse_mode: 'Markdown'
+    }).catch((err) => {
+        console.error(err);
     });
 }
 
@@ -53,10 +55,10 @@ TelegramBot.on('message', (message) => {
     }
 });
 
-TelegramBot.getMe().then((data) => {
+TelegramBot.getMe().then(() => {
 	getBanData();
 }).catch((err) => {
-    console.error(`[X] ${err}`);
+    console.error(err);
 });
 
 function addProfile(apiURL) {
@@ -66,7 +68,7 @@ function addProfile(apiURL) {
             var apiData = JSON.parse(body);
             if (apiData.players[0].SteamId) {
                 var player = apiData.players[0];
-                ProfileDB.insert({ SteamID: player.SteamId, CommunityBanned: player.CommunityBanned, VACBanned: player.VACBanned, NumberOfVACBans: player.NumberOfVACBans, NumberOfGameBans: player.NumberOfGameBans, Tracked: true }, (err, data) => {
+                ProfileDB.insert({ SteamID: player.SteamId, CommunityBanned: player.CommunityBanned, VACBanned: player.VACBanned, NumberOfVACBans: player.NumberOfVACBans, NumberOfGameBans: player.NumberOfGameBans, Tracked: true }, (err) => {
                     if (err) return;
                     sendTelegramMessage(`${steamID} ${Language.profileAdded}`);
                 });
@@ -131,17 +133,17 @@ function getBanData() {
 function updateProfileDB(steamID, player, type) {
     switch(type) {
         case 'community':
-            ProfileDB.update({ SteamID: steamID }, { $set: { CommunityBanned: player.CommunityBanned } }, {}, (err, numReplaced) => {
+            ProfileDB.update({ SteamID: steamID }, { $set: { CommunityBanned: player.CommunityBanned } }, {}, (err) => {
                 if (err) console.error(Language.errorUpdatingDB);
             });
             break;
         case 'vac':
-            ProfileDB.update({ SteamID: steamID }, { $set: { VACBanned: player.VACBanned, NumberOfVACBans: player.NumberOfVACBans, Tracked: false } }, {}, (err, numReplaced) => {
+            ProfileDB.update({ SteamID: steamID }, { $set: { VACBanned: player.VACBanned, NumberOfVACBans: player.NumberOfVACBans, Tracked: false } }, {}, (err) => {
                 if (err) console.error(Language.errorUpdatingDB);
             });
             break;
         case 'game':
-            ProfileDB.update({ SteamID: steamID }, { $set: { NumberOfGameBans: player.NumberOfGameBans, Tracked: false } }, {}, (err, numReplaced) => {
+            ProfileDB.update({ SteamID: steamID }, { $set: { NumberOfGameBans: player.NumberOfGameBans, Tracked: false } }, {}, (err) => {
                 if (err) console.error(Language.errorUpdatingDB);
             });
             break;
