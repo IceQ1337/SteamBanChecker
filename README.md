@@ -53,19 +53,24 @@ Adding a profile via customURL will **NOT** work!
 - While running, the script will check profiles every `checkInterval` minutes. (Default: 15)
   - Keep in mind that you are limited to 100.000 calls to the Steam Web API per day.
 - If a profile got banned since it was checked for the first time, you will receive a telegram notification.
-  - This includes the following ban types: Community Ban, VAC Ban, Game Ban
-  - A banned profile will no longer get checked if it got banned (Exception: Community Ban)
+  - This includes the following ban types: Community Ban, VAC Ban, Game Ban.
+  - A banned profile will no longer get checked if it got banned. (Exception: Community Ban)
 
 All data is stored in a readable database called `profiles.db`.
 
 ### Retrieve your Telegram Chat ID
 In order to retrieve your unique Telegram Chat ID, do as follows:
 
+**Easy Method**
+- `/start` a chat with the [@myidbot](https://telegram.me/myidbot).
+- Type `/myid` to get your chat ID.
+
+**Complex Method**
 - `/start` a chat with your bot.
-- Get the list of updates for your bot at: `https://api.telegram.org/bot<Telegram Bot Token>/getUpdates`
-  - Example: `https://api.telegram.org/bot123456789:abcdefghijklmnopqrstuvwxyz/getUpdates`
+- Get the list of updates for your bot at: `https://api.telegram.org/bot<Telegram Bot Token>/getUpdates`.
+  - Example: `https://api.telegram.org/bot123456789:abcdefghijklmnopqrstuvwxyz/getUpdates`.
 - Search for the `id` field within the `from` object of your message response.
-  - Absolute Path: `result[arrayIndex].message.from.id`
+  - Absolute Path: `result[arrayIndex].message.from.id`.
 
 ### Used Node.js Modules
 - [NeDB](https://github.com/louischatriot/nedb)
