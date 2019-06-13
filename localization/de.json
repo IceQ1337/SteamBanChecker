@@ -18,5 +18,6 @@
 	"userRequestDeniedMaster": "Die Anfrage wurde abgelehnt!",
 	"userExists": "Dieser Nutzer hat bereits Zugriff!",
 	"buttonAccept": "Akzeptieren",
-	"buttonDeny": "Ablehnen"
+	"buttonDeny": "Ablehnen",
+	"masterInfo": "Mein Besitzer hat keine Infos hinterlegt, aber mein Code ist unter https://github.com/IceQ1337/SteamBanChecker erreichbar."
 }
