@@ -1,18 +1,13 @@
 const Path = require('path');
 const Request = require('request');
+const Datastore = require('nedb');
+const Telegram = require('telegram-bot-api');
 const Config = require(Path.join(__dirname, 'config.json'));
 
 const SteamProfileURL = 'https://steamcommunity.com/profiles/';
 const SteamWebAPIURL = `http://api.steampowered.com/ISteamUser/GetPlayerBans/v1/?key=${Config.Steam.apiKey}&steamids=`;
 
-const REGEX_STEAMURL = /^(http|https):\/\/steamcommunity.com\/profiles\//;
-const REGEX_STEAMID64 = /^[0-9]{17}$/;
-const REGEX_STEAMURL64 = /^(http|https):\/\/steamcommunity.com\/profiles\/[0-9]{17}$/;
-
-const Datastore = require('nedb');
-const ProfileDB = new Datastore({ filename: Path.join(__dirname, 'profiles.db'), autoload: true });
-
-const Telegram = require('telegram-bot-api');
+const DB = new Datastore({ filename: Path.join(__dirname, 'profiles.db'), autoload: true });
 const TelegramBot = new Telegram({ token: Config.Telegram.botToken, updates: { enabled: true } });
 
 function sendTelegramMessage(message) {
@@ -29,15 +24,29 @@ TelegramBot.on('message', (message) => {
 
     if (chatID == Config.Telegram.masterChatID) {
         if (msg.startsWith('/add')) {
-            var steamID = msg.replace('/add ', '');
-            if (steamID.match(REGEX_STEAMID64)) {
-                addProfile(SteamWebAPIURL + steamID);
-			} else if (steamID.match(REGEX_STEAMURL64)) {
-                var steamID64 = steamID.replace(REGEX_STEAMURL, '');
-                addProfile(SteamWebAPIURL + steamID64);
-            } else {
-                sendTelegramMessage(steamID + ' is not valid and was NOT added to the list!');
-            }
+            var steamID64 = msg.replace('/add ', '');
+            if (steamID64.match("[0-9]+")) {
+                var apiURL = SteamWebAPIURL + steamID64;
+                Request(apiURL, (err, response, body) => {
+                    if (err) return;
+                    if (response.statusCode === 200) {
+                        var apiData = JSON.parse(body);
+                        if (apiData.players[0].SteamId) {
+                            var player = apiData.players[0];
+                            DB.insert({ SteamID: player.SteamId, CommunityBanned: player.CommunityBanned, VACBanned: player.VACBanned, NumberOfVACBans: player.NumberOfVACBans, NumberOfGameBans: player.NumberOfGameBans, Tracked: true }, (err, data) => {
+                                if (err) return;
+                                sendTelegramMessage(steamID64 + ' was successfully added to the list!');
+                            });
+                        } else {
+                            sendTelegramMessage(steamID64 + ' is not valid and was NOT added to the list!');
+                        }
+                    } else {
+                        sendTelegramMessage('An error occurred requesting data from the steam api.');
+                    }
+                });
+			} else {
+				sendTelegramMessage(steamID64 + ' is not valid and was NOT added to the list!');
+			}
         }
     }
 });
@@ -47,26 +56,6 @@ TelegramBot.getMe().then((data) => {
 }).catch((err) => {
     console.log(`[X] ${err}`);
 });
-
-function addProfile(apiURL) {
-    Request(apiURL, (err, response, body) => {
-        if (err) return;
-        if (response.statusCode === 200) {
-            var apiData = JSON.parse(body);
-            if (apiData.players[0].SteamId) {
-                var player = apiData.players[0];
-                ProfileDB.insert({ SteamID: player.SteamId, CommunityBanned: player.CommunityBanned, VACBanned: player.VACBanned, NumberOfVACBans: player.NumberOfVACBans, NumberOfGameBans: player.NumberOfGameBans, Tracked: true }, (err, data) => {
-                    if (err) return;
-                    sendTelegramMessage(steamID + ' was successfully added to the list!');
-                });
-            } else {
-                sendTelegramMessage('An unexpected error occurred. Please try again.');
-            }
-        } else {
-            sendTelegramMessage('An unexpected error occurred. Please try again.');
-        }
-    });
-}
 
 function getBanData() {
     DB.find({ Tracked: true }, (err, profiles) => {
