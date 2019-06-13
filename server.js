@@ -113,8 +113,6 @@ TelegramBot.on('message', (message) => {
                     sendTelegramMessage(Language.userRequestSend, chatID);
                     sendTelegramMessageAcceptDeny(`${username} ${Language.userRequestSendMaster}`, inlineKeyboard);
                 }
-            } else if (msg == '/master') {
-                sendTelegramMessage(Language.masterInfo, chatID);
             }
         }
     })

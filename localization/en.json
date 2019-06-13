@@ -9,7 +9,7 @@
 	"profileVACBannedAgain": "just got VAC banned again!",
 	"profileGameBanned": "just got game banned!",
 	"profileGameBannedAgain": "just got game banned again!",
-	"userStartInfo": "You are not my /master, but you can request access from him via /request.",
+	"userStartInfo": "You are currently not allowed to use this bot, but you can request access using /request.",
 	"userRequestSend": "The request has been sent.",
 	"userRequestSendMaster": "has requested access. How would you like to proceed?",
 	"userRequestAccepted": "Your request has been accepted.\nYou can now add profiles via /add <steamID64>.",
@@ -18,6 +18,5 @@
 	"userRequestDeniedMaster": "The request has been denied!",
 	"userExists": "This user already has access!",
 	"buttonAccept": "Accept",
-	"buttonDeny": "Deny",
-	"masterInfo": "My owner has not provided any information, but my code can be found at https://github.com/IceQ1337/SteamBanChecker"
+	"buttonDeny": "Deny"
 }
