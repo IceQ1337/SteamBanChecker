@@ -20,7 +20,8 @@ In order to use this bot, you need the following dependencies and tokens:
 - Type `npm start` or `node server.js` to start the bot.
   - To find out how to run the script permanently on a server you should check out [forever](https://github.com/foreversd/forever)
 
-**The script does not properly check if your config is valid or has missing information. Make sure you have everything set up properly.**
+**The script does not properly check if your config is valid or has missing information.**  
+**Make sure you have everything set up properly!**  
 
 ## Configuration
 ```Javascript
@@ -48,7 +49,7 @@ In order to use this bot, you need the following dependencies and tokens:
 To get the steamID64 or URL of a profile you can use websites like [STEAMID I/O](https://steamid.io/).  
 Adding a profile via customURL will **NOT** work!
 
-**Adding Users**
+**Adding Users**  
 While `allowRequests` is true, everyone can `/request` access to the script and you can either accept or decline the request.  
 Accepted users can `/add` their own profiles. You will not be notified about this.
 
