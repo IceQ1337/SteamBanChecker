@@ -42,14 +42,14 @@ In order to use this bot, you need the following dependencies and tokens:
 ```
 
 ## Usage
-**Adding Profiles**
+### Adding Profiles
 - Use `/add <steamID64|profileURL>` to add profiles to the list.
   - Example: `/add 12345678912345678` or `/add http://steamcommunity.com/profiles/12345678912345678`
 
 To get the steamID64 or URL of a profile you can use websites like [STEAMID I/O](https://steamid.io/).  
 Adding a profile via customURL will **NOT** work!
 
-**Adding Users**  
+## Adding Users
 While `allowRequests` is true, everyone can `/request` access to the script and you can either accept or decline the request.  
 Accepted users can `/add` their own profiles. You will not be notified about this.
 
@@ -64,7 +64,7 @@ Accepted users can `/add` their own profiles. You will not be notified about thi
 
 All data is stored in a readable database called `profiles.db`
 
-### Retrieve your Telegram Chat ID
+## Retrieve your Telegram Chat ID
 In order to retrieve your unique Telegram Chat ID, do as follows:
 
 **Easy Method**
@@ -78,7 +78,7 @@ In order to retrieve your unique Telegram Chat ID, do as follows:
 - Search for the `id` field within the `from` object of your message response.
   - Absolute Path: `result[arrayIndex].message.from.id`
 
-### Contributing
+## Contributing
 There are currently no contributing guidelines, but I am open to any kind of improvements.  
 In order to contribute to the project, please follow the **GitHub Standard Fork & Pull Request Workflow**
 
@@ -88,14 +88,14 @@ In order to contribute to the project, please follow the **GitHub Standard Fork 
 - **Push** your work to your own fork.
 - Submit a **Pull Request** so I can review your changes
 
-### Used Node.js Modules
+## Used Node.js Modules
 - [NeDB](https://github.com/louischatriot/nedb)
 - [Request](https://github.com/request/request)
 - [Node.js Telegram Bot API](https://github.com/yagop/node-telegram-bot-api)
 
-### Donating
+## Donating
 If you find this script useful, you can support me by donating items via steam.  
 [Steam Trade Link](https://steamcommunity.com/tradeoffer/new/?partner=169517256&token=77MTawmP)
 
-### License
+## License
 [MIT](https://github.com/IceQ1337/SteamBanChecker/blob/master/LICENSE)
