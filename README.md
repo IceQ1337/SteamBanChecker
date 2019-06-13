@@ -88,7 +88,7 @@ In order to contribute to the project, please follow the **GitHub Standard Fork 
 - [Node.js Telegram Bot API](https://github.com/yagop/node-telegram-bot-api)
 
 ### Donating
-If you find this script useful, you can support me by donating items via steam.
+If you find this script useful, you can support me by donating items via steam.  
 [Steam Trade Link](https://steamcommunity.com/tradeoffer/new/?partner=169517256&token=77MTawmP)
 
 ### License
