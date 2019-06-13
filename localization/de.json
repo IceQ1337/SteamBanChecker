@@ -2,6 +2,7 @@
 	"errorUnexpected": "Ein unerwarteter Fehler ist aufgetreten. Bitte versuche es erneut.",
 	"errorUpdatingDB": "Beim Aktualisieren der Datenbank ist ein unerwarteter Fehler aufgetreten.",
 	"profileInvalid": "ist ungültig und wurde NICHT zur Liste hinzugefügt!",
+	"profileExists": "befindet sich bereits in der Liste!",
 	"profileAdded": "wurde erfolgreich zur Liste hinzugefügt!",
 	"CommunityBanned": "wurde soeben von der Steam-Community ausgeschlossen!",
 	"VACBanned": "wurde soeben von VAC ausgeschlossen!",

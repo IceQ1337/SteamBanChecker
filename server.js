@@ -22,6 +22,9 @@ const REGEX_STEAMURL64 = /^(http|https):\/\/steamcommunity.com\/profiles\/[0-9]{
 
 const Datastore = require('nedb');
 const ProfileDB = new Datastore({ filename: Path.join(__dirname, 'profiles.db'), autoload: true });
+ProfileDB.ensureIndex({ fieldName: 'SteamID', unique: true }, (err) => {
+    if (err) console.error(err);
+});
 
 const Telegram = require('telegram-bot-api');
 const TelegramBot = new Telegram({ token: Config.Telegram.botToken, updates: { enabled: true } });
@@ -69,7 +72,10 @@ function addProfile(apiURL) {
             if (apiData.players[0].SteamId) {
                 var player = apiData.players[0];
                 ProfileDB.insert({ SteamID: player.SteamId, CommunityBanned: player.CommunityBanned, VACBanned: player.VACBanned, NumberOfVACBans: player.NumberOfVACBans, NumberOfGameBans: player.NumberOfGameBans, Tracked: true }, (err) => {
-                    if (err) return;
+                    if (err) {
+                        if (err.errorType == 'uniqueViolated') sendTelegramMessage(`${steamID} ${Language.profileExists}`);
+                        return;
+                    }
                     sendTelegramMessage(`${steamID} ${Language.profileAdded}`);
                 });
             } else {
