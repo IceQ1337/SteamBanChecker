@@ -20,7 +20,7 @@ In order to use this bot, you need the following dependencies and tokens:
 - Type `npm start` or `node server.js` to start the bot.
   - To find out how to run the script permanently on a server you should check out [forever](https://github.com/foreversd/forever)
 
-**The script does not check if your config is valid or missing information so make sure you set everything up correctly.**
+**The script does not properly check if your config is valid or missing information so make sure you set everything up correctly.**
 
 ## Usage
 **Adding Profiles**

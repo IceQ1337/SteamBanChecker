@@ -1,6 +1,17 @@
 const Path = require('path');
 const Request = require('request');
 const Config = require(Path.join(__dirname, 'config.json'));
+const Language = require(Path.join(__dirname, `/localization/${Config.General.language}.json`));
+
+if (Config == null) {
+    console.error('Missing config information. Exiting now.');
+    process.exitCode = 1;
+}
+
+if (Language == null) {
+    console.error('Missing localization. Exiting now.');
+    process.exitCode = 1;
+}
 
 const SteamProfileURL = 'https://steamcommunity.com/profiles/';
 const SteamWebAPIURL = `http://api.steampowered.com/ISteamUser/GetPlayerBans/v1/?key=${Config.Steam.apiKey}&steamids=`;
@@ -36,7 +47,7 @@ TelegramBot.on('message', (message) => {
                 var steamID64 = steamID.replace(REGEX_STEAMURL, '');
                 addProfile(SteamWebAPIURL + steamID64);
             } else {
-                sendTelegramMessage(steamID + ' is not valid and was NOT added to the list!');
+                sendTelegramMessage(`${steamID} ${Language.profileInvalid}`);
             }
         }
     }
@@ -45,7 +56,7 @@ TelegramBot.on('message', (message) => {
 TelegramBot.getMe().then((data) => {
 	getBanData();
 }).catch((err) => {
-    console.log(`[X] ${err}`);
+    console.error(`[X] ${err}`);
 });
 
 function addProfile(apiURL) {
@@ -57,13 +68,13 @@ function addProfile(apiURL) {
                 var player = apiData.players[0];
                 ProfileDB.insert({ SteamID: player.SteamId, CommunityBanned: player.CommunityBanned, VACBanned: player.VACBanned, NumberOfVACBans: player.NumberOfVACBans, NumberOfGameBans: player.NumberOfGameBans, Tracked: true }, (err, data) => {
                     if (err) return;
-                    sendTelegramMessage(steamID + ' was successfully added to the list!');
+                    sendTelegramMessage(`${steamID} ${Language.profileAdded}`);
                 });
             } else {
-                sendTelegramMessage('An unexpected error occurred. Please try again.');
+                sendTelegramMessage(Language.errorUnexpected);
             }
         } else {
-            sendTelegramMessage('An unexpected error occurred. Please try again.');
+            sendTelegramMessage(Language.errorUnexpected);
         }
     });
 }
@@ -84,53 +95,54 @@ function getBanData() {
                 var apiData = JSON.parse(body);
                 apiData.players.forEach((player) => {
                     var steamID = player.SteamId;
+                    var profileURL = SteamProfileURL + steamID;
                     ProfileDB.findOne({ SteamID: steamID }, (err, profile) => {
                         if (err) return;
                         if (profile == null) return;
 
                         if (player.CommunityBanned && !profile.CommunityBanned) {
                             updateProfileDB(steamID, player, 'community');
-                            sendTelegramMessage(SteamProfileURL + steamID + ' just got community banned!');
+                            sendTelegramMessage(`${profileURL}\n${Language.CommunityBanned}`);
                         }
 
                         if (player.VACBanned && !profile.VACBanned) {
                             updateProfileDB(steamID, player, 'vac');
-                            sendTelegramMessage(SteamProfileURL + steamID + ' just got VAC banned!');
+                            sendTelegramMessage(`${profileURL}\n${Language.VACBanned}`);
                         } else if (player.VACBanned && player.NumberOfVACBans > profile.NumberOfVACBans) {
                             updateProfileDB(steamID, player, 'vac');
-                            sendTelegramMessage(SteamProfileURL + steamID + ' just got VAC banned again!');                        
+                            sendTelegramMessage(`${profileURL}\n${Language.VACBannedAgain}`);                        
                         }
 
                         if (player.NumberOfGameBans > profile.NumberOfGameBans && profile.NumberOfGameBans > 0) {
                             updateProfileDB(steamID, player, 'game');
-                            sendTelegramMessage(SteamProfileURL + steamID + ' just got game banned again!');
+                            sendTelegramMessage(`${profileURL}\n${Language.GameBannedAgain}`);
                         } else if (player.NumberOfGameBans > profile.NumberOfGameBans) {
                             updateProfileDB(steamID, player, 'game');
-                            sendTelegramMessage(SteamProfileURL + steamID + ' just got game banned!');  
+                            sendTelegramMessage(`${profileURL}\n${Language.GameBanned}`);  
                         }
                     });
                 });
             }
         });
     });
-    setTimeout(getBanData, 1000 * 60 * Config.Steam.checkInterval);
+    setTimeout(getBanData, 1000 * 60 * Config.General.checkInterval);
 }
 
 function updateProfileDB(steamID, player, type) {
     switch(type) {
         case 'community':
             ProfileDB.update({ SteamID: steamID }, { $set: { CommunityBanned: player.CommunityBanned } }, {}, (err, numReplaced) => {
-                if (err) console.log('An unexpected error occurred while updating the database.');
+                if (err) console.error(Language.errorUpdatingDB);
             });
             break;
         case 'vac':
             ProfileDB.update({ SteamID: steamID }, { $set: { VACBanned: player.VACBanned, NumberOfVACBans: player.NumberOfVACBans, Tracked: false } }, {}, (err, numReplaced) => {
-                if (err) console.log('An unexpected error occurred while updating the database.');
+                if (err) console.error(Language.errorUpdatingDB);
             });
             break;
         case 'game':
             ProfileDB.update({ SteamID: steamID }, { $set: { NumberOfGameBans: player.NumberOfGameBans, Tracked: false } }, {}, (err, numReplaced) => {
-                if (err) console.log('An unexpected error occurred while updating the database.');
+                if (err) console.error(Language.errorUpdatingDB);
             });
             break;
         default:

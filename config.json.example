@@ -1,7 +1,10 @@
 {
-	"Steam": {
-		"apiKey": "STEAM API KEY",
+	"General": {
+		"language": "en",
 		"checkInterval": 15
+	},
+	"Steam": {
+		"apiKey": "STEAM API KEY"
 	},
 	"Telegram": {
 		"botToken": "Telegram Bot Token",

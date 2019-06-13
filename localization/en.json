@@ -1,0 +1,11 @@
+{
+	"errorUnexpected": "An unexpected error occurred. Please try again.",
+	"errorUpdatingDB": "An unexpected error occurred while updating the database.",
+	"profileInvalid": "is invalid and was NOT added to the list!",
+	"profileAdded": "was successfully added to the list!",
+	"CommunityBanned": "just got community banned!",
+	"VACBanned": "just got VAC banned!",
+	"VACBannedAgain": "just got VAC banned again!",
+	"GameBanned": "just got game banned!",
+	"GameBannedAgain": "just got game banned again!"
+}
