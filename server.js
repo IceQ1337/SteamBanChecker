@@ -89,34 +89,24 @@ function getBanData() {
                         if (profile == null) return;
 
                         if (player.CommunityBanned && !profile.CommunityBanned) {
-                            ProfileDB.update({ SteamID: steamID }, { $set: { CommunityBanned: player.CommunityBanned } }, {}, (err, numReplaced) => {
-                                if (err) return;
-                                sendTelegramMessage(SteamProfileURL + steamID + ' just got community banned!');
-                            });
+                            updateProfileDB(steamID, player, 'community');
+                            sendTelegramMessage(SteamProfileURL + steamID + ' just got community banned!');
                         }
 
                         if (player.VACBanned && !profile.VACBanned) {
-                            ProfileDB.update({ SteamID: steamID }, { $set: { VACBanned: player.VACBanned, NumberOfVACBans: player.NumberOfVACBans, Tracked: false } }, {}, (err, numReplaced) => {
-                                if (err) return;
-                                sendTelegramMessage(SteamProfileURL + steamID + ' just got VAC banned!');
-                            });
+                            updateProfileDB(steamID, player, 'vac');
+                            sendTelegramMessage(SteamProfileURL + steamID + ' just got VAC banned!');
                         } else if (player.VACBanned && player.NumberOfVACBans > profile.NumberOfVACBans) {
-                            ProfileDB.update({ SteamID: steamID }, { $set: { VACBanned: player.VACBanned, NumberOfVACBans: player.NumberOfVACBans, Tracked: false } }, {}, (err, numReplaced) => {
-                                if (err) return;
-                                sendTelegramMessage(SteamProfileURL + steamID + ' just got VAC banned again!');
-                            });                            
+                            updateProfileDB(steamID, player, 'vac');
+                            sendTelegramMessage(SteamProfileURL + steamID + ' just got VAC banned again!');                        
                         }
 
                         if (player.NumberOfGameBans > profile.NumberOfGameBans && profile.NumberOfGameBans > 0) {
-                            ProfileDB.update({ SteamID: steamID }, { $set: { NumberOfGameBans: player.NumberOfGameBans, Tracked: false } }, {}, (err, numReplaced) => {
-                                if (err) return;
-                                sendTelegramMessage(SteamProfileURL + steamID + ' just got game banned again!');
-                            });  
+                            updateProfileDB(steamID, player, 'game');
+                            sendTelegramMessage(SteamProfileURL + steamID + ' just got game banned again!');
                         } else if (player.NumberOfGameBans > profile.NumberOfGameBans) {
-                            ProfileDB.update({ SteamID: steamID }, { $set: { NumberOfGameBans: player.NumberOfGameBans, Tracked: false } }, {}, (err, numReplaced) => {
-                                if (err) return;
-                                sendTelegramMessage(SteamProfileURL + steamID + ' just got game banned!');
-                            });  
+                            updateProfileDB(steamID, player, 'game');
+                            sendTelegramMessage(SteamProfileURL + steamID + ' just got game banned!');  
                         }
                     });
                 });
@@ -124,4 +114,26 @@ function getBanData() {
         });
     });
     setTimeout(getBanData, 1000 * 60 * Config.Steam.checkInterval);
+}
+
+function updateProfileDB(steamID, player, type) {
+    switch(type) {
+        case 'community':
+            ProfileDB.update({ SteamID: steamID }, { $set: { CommunityBanned: player.CommunityBanned } }, {}, (err, numReplaced) => {
+                if (err) console.log('An unexpected error occurred while updating the database.');
+            });
+            break;
+        case 'vac':
+            ProfileDB.update({ SteamID: steamID }, { $set: { VACBanned: player.VACBanned, NumberOfVACBans: player.NumberOfVACBans, Tracked: false } }, {}, (err, numReplaced) => {
+                if (err) console.log('An unexpected error occurred while updating the database.');
+            });
+            break;
+        case 'game':
+            ProfileDB.update({ SteamID: steamID }, { $set: { NumberOfGameBans: player.NumberOfGameBans, Tracked: false } }, {}, (err, numReplaced) => {
+                if (err) console.log('An unexpected error occurred while updating the database.');
+            });
+            break;
+        default:
+            break;
+    }
 }
