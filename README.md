@@ -27,7 +27,7 @@ In order to use this bot, you need the following dependencies and tokens:
 - Use `/add <steamID64|profileURL>` to add profiles to the list.
   - Example: `/add 12345678912345678` or `/add http://steamcommunity.com/profiles/12345678912345678`
 
-To get the steamID64 or URL of a profile you can use websites like [STEAMID I/O](https://steamid.io/).
+To get the steamID64 or URL of a profile you can use websites like [STEAMID I/O](https://steamid.io/).  
 Adding a profile via customURL will **NOT** work!
 
 **How It Operates**
@@ -56,7 +56,7 @@ In order to retrieve your unique Telegram Chat ID, do as follows:
 - [Node.js Telegram Bot API](https://github.com/yagop/node-telegram-bot-api)
 
 ### Contributing
-There are currently no contributing guidelines, but I am open to any kind of improvements.
+There are currently no contributing guidelines, but I am open to any kind of improvements.  
 In order to contribute to the project, please follow the **GitHub Standard Fork & Pull Request Workflow**
 
 - **Fork** this repository on GitHub.
