@@ -49,7 +49,7 @@ In order to use this bot, you need the following dependencies and tokens:
 To get the steamID64 or URL of a profile you can use websites like [STEAMID I/O](https://steamid.io/).  
 Adding a profile via customURL will **NOT** work!
 
-## Adding Users
+### Adding Users
 While `allowRequests` is true, everyone can `/request` access to the script and you can either accept or decline the request.  
 Accepted users can `/add` their own profiles. You will not be notified about this.
 
