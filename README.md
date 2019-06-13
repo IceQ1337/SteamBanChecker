@@ -1,6 +1,5 @@
 # Steam Ban Checker
-[![forthebadge](https://forthebadge.com/images/badges/uses-js.svg)](https://forthebadge.com)
-
+[![forthebadge](https://forthebadge.com/images/badges/uses-js.svg)](https://forthebadge.com)  
 A simple Node.js script that periodically checks given steam-profiles for various bans and informs you via Telegram Bot.
 
 ## Requirements
@@ -20,7 +19,7 @@ In order to use this bot, you need the following dependencies and tokens:
 - Type `npm start` or `node server.js` to start the bot.
   - To find out how to run the script permanently on a server you should check out [forever](https://github.com/foreversd/forever)
 
-**The bot does not check if your config is valid or missing information so make sure you set everything up correctly.**
+**The script does not check if your config is valid or missing information so make sure you set everything up correctly.**
 
 ## Usage
 **Adding Profiles**
@@ -66,7 +65,7 @@ In order to contribute to the project, please follow the **GitHub Standard Fork 
 - Submit a **Pull Request** so I can review your changes
 
 ### Donating
-If you find this bot useful, you can support me by donating items via steam.
+If you find this script useful, you can support me by donating items via steam.
 - [Steam Trade Link](https://steamcommunity.com/tradeoffer/new/?partner=169517256&token=77MTawmP)
 
 ### License
