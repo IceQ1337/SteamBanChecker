@@ -36,13 +36,25 @@ const Telegram = require('telegram-bot-api');
 const TelegramBot = new Telegram({ token: Config.Telegram.botToken, updates: { enabled: true } });
 
 function sendTelegramMessage(message, chatID = Config.Telegram.masterChatID) {
-    TelegramBot.sendMessage({
-        chat_id: chatID,
-        text: message,
-        parse_mode: 'Markdown'
-    }).catch((err) => {
-        console.error(err);
-    });
+    if (Array.isArray(chatID)) {
+        chatID.forEach((userID) => {
+            TelegramBot.sendMessage({
+                chat_id: userID,
+                text: message,
+                parse_mode: 'Markdown'
+            }).catch((err) => {
+                console.error(err);
+            });
+        });
+    } else {
+        TelegramBot.sendMessage({
+            chat_id: chatID,
+            text: message,
+            parse_mode: 'Markdown'
+        }).catch((err) => {
+            console.error(err);
+        });
+    }
 }
 
 function sendTelegramMessageAcceptDeny(message, inlineKeyboard, chatID = Config.Telegram.masterChatID) {
@@ -149,14 +161,24 @@ function addProfile(apiURL, chatID) {
             var apiData = JSON.parse(body);
             if (apiData.players[0].SteamId) {
                 var player = apiData.players[0];
-                if (chatID == Config.Telegram.masterChatID) {
-                    var profile = { SteamID: player.SteamId, CommunityBanned: player.CommunityBanned, VACBanned: player.VACBanned, NumberOfVACBans: player.NumberOfVACBans, NumberOfGameBans: player.NumberOfGameBans, Tracked: true };
-                } else {
-                    var profile = { SteamID: player.SteamId, CommunityBanned: player.CommunityBanned, VACBanned: player.VACBanned, NumberOfVACBans: player.NumberOfVACBans, NumberOfGameBans: player.NumberOfGameBans, Tracked: true, User: chatID };
-                }
-                ProfileDB.insert(profile, (err) => {
+                ProfileDB.insert({ SteamID: player.SteamId, CommunityBanned: player.CommunityBanned, VACBanned: player.VACBanned, NumberOfVACBans: player.NumberOfVACBans, NumberOfGameBans: player.NumberOfGameBans, Tracked: true, Users: [chatID] }, (err) => {
                     if (err) {
-                        if (err.errorType == 'uniqueViolated') sendTelegramMessage(`${player.SteamId} ${Language.profileExists}`, chatID);
+                        if (err.errorType == 'uniqueViolated') {
+                            ProfileDB.findOne({ SteamID: player.SteamId }, (err, profile) => {
+                                if (err) console.error(Language.errorUpdatingDB);
+                                if (profile == null) return;
+
+                                if (profile.Users.includes(chatID)) {
+                                    sendTelegramMessage(`${player.SteamId} ${Language.profileExists}`, chatID);
+                                } else {
+                                    profile.Users.push(chatID);
+                                    ProfileDB.update({ SteamID: player.SteamId }, { $set: { Users: profile.Users } }, {}, (err) => {
+                                        if (err) console.error(Language.errorUpdatingDB);
+                                        sendTelegramMessage(`${player.SteamId} ${Language.profileAdded}`, chatID);
+                                    });
+                                }
+                            });
+                        }
                         return;
                     }
                     sendTelegramMessage(`${player.SteamId} ${Language.profileAdded}`, chatID);
@@ -191,27 +213,25 @@ function getBanData() {
                         if (err) return;
                         if (profile == null) return;
 
-                        var userID = (profile.User ? profile.User : Config.Telegram.masterChatID);
-
                         if (player.CommunityBanned && !profile.CommunityBanned) {
                             updateProfileDB(steamID, player, 'community');
-                            sendTelegramMessage(`${profileURL}\n${Language.profileCommunityBanned}`, userID);
+                            sendTelegramMessage(`${profileURL}\n${Language.profileCommunityBanned}`, profile.Users);
                         }
 
                         if (player.VACBanned && !profile.VACBanned) {
                             updateProfileDB(steamID, player, 'vac');
-                            sendTelegramMessage(`${profileURL}\n${Language.profileVACBanned}`, userID);
+                            sendTelegramMessage(`${profileURL}\n${Language.profileVACBanned}`, profile.Users);
                         } else if (player.VACBanned && player.NumberOfVACBans > profile.NumberOfVACBans) {
                             updateProfileDB(steamID, player, 'vac');
-                            sendTelegramMessage(`${profileURL}\n${Language.profileVACBannedAgain}`, userID);                        
+                            sendTelegramMessage(`${profileURL}\n${Language.profileVACBannedAgain}`, profile.Users);                        
                         }
 
                         if (player.NumberOfGameBans > profile.NumberOfGameBans && profile.NumberOfGameBans > 0) {
                             updateProfileDB(steamID, player, 'game');
-                            sendTelegramMessage(`${profileURL}\n${Language.profileGameBannedAgain}`, userID);
+                            sendTelegramMessage(`${profileURL}\n${Language.profileGameBannedAgain}`, profile.Users);
                         } else if (player.NumberOfGameBans > profile.NumberOfGameBans) {
                             updateProfileDB(steamID, player, 'game');
-                            sendTelegramMessage(`${profileURL}\n${Language.profileGameBanned}`, userID);  
+                            sendTelegramMessage(`${profileURL}\n${Language.profileGameBanned}`, profile.Users);
                         }
                     });
                 });
