@@ -56,26 +56,21 @@ Adding a profile via customURL will **NOT** work!
   - This includes the following ban types: Community Ban, VAC Ban, Game Ban.
   - A banned profile will no longer get checked if it got banned. (Exception: Community Ban)
 
-All data is stored in a readable database called `profiles.db`.
+All data is stored in a readable database called `profiles.db`
 
 ### Retrieve your Telegram Chat ID
 In order to retrieve your unique Telegram Chat ID, do as follows:
 
 **Easy Method**
 - `/start` a chat with the [@myidbot](https://telegram.me/myidbot).
-- Type `/myid` to get your chat ID.
+- Type `/myid` to get your Telegram Chat ID.
 
 **Complex Method**
 - `/start` a chat with your bot.
-- Get the list of updates for your bot at: `https://api.telegram.org/bot<Telegram Bot Token>/getUpdates`.
-  - Example: `https://api.telegram.org/bot123456789:abcdefghijklmnopqrstuvwxyz/getUpdates`.
+- Get the list of updates for your bot at: `https://api.telegram.org/bot<Telegram Bot Token>/getUpdates`
+  - Example: `https://api.telegram.org/bot123456789:abcdefghijklmnopqrstuvwxyz/getUpdates`
 - Search for the `id` field within the `from` object of your message response.
-  - Absolute Path: `result[arrayIndex].message.from.id`.
-
-### Used Node.js Modules
-- [NeDB](https://github.com/louischatriot/nedb)
-- [Request](https://github.com/request/request)
-- [Node.js Telegram Bot API](https://github.com/yagop/node-telegram-bot-api)
+  - Absolute Path: `result[arrayIndex].message.from.id`
 
 ### Contributing
 There are currently no contributing guidelines, but I am open to any kind of improvements.  
@@ -87,9 +82,14 @@ In order to contribute to the project, please follow the **GitHub Standard Fork 
 - **Push** your work to your own fork.
 - Submit a **Pull Request** so I can review your changes
 
+### Used Node.js Modules
+- [NeDB](https://github.com/louischatriot/nedb)
+- [Request](https://github.com/request/request)
+- [Node.js Telegram Bot API](https://github.com/yagop/node-telegram-bot-api)
+
 ### Donating
 If you find this script useful, you can support me by donating items via steam.
-- [Steam Trade Link](https://steamcommunity.com/tradeoffer/new/?partner=169517256&token=77MTawmP)
+[Steam Trade Link](https://steamcommunity.com/tradeoffer/new/?partner=169517256&token=77MTawmP)
 
 ### License
 [MIT](https://github.com/IceQ1337/SteamBanChecker/blob/master/LICENSE)
