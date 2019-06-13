@@ -1,4 +1,5 @@
 # Steam Ban Checker
+[![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com)
 [![forthebadge](https://forthebadge.com/images/badges/uses-js.svg)](https://forthebadge.com)  
 A simple Node.js script that periodically checks given steam-profiles for various bans and informs you via Telegram Bot.
 
@@ -47,7 +48,7 @@ In order to retrieve your unique Telegram Chat ID, do as follows:
 - Get the list of updates for your bot at: `https://api.telegram.org/bot<Telegram Bot Token>/getUpdates`
   - Example: `https://api.telegram.org/bot123456789:abcdefghijklmnopqrstuvwxyz/getUpdates`
 - Search for the `id` field within the `from` object of your message response.
-  - Absolute Path: `result[arrayindex].message.from.id`
+  - Absolute Path: `result[arrayIndex].message.from.id`
 
 ### Used Node.js Modules
 - [NeDB](https://github.com/louischatriot/nedb)
