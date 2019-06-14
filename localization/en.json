@@ -19,6 +19,7 @@
 	"userRequestRevoked": "Your access has just been revoked!",
 	"userRequestRevokedMaster": "The user has been removed successfully.",
 	"userExists": "This user already has access!",
+	"userEmpty": "Nobody else is currently using this bot.",
 	"buttonAccept": "Accept",
 	"buttonDeny": "Deny",
 	"buttonCancel": "Cancel",

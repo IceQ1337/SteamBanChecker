@@ -104,10 +104,17 @@ TelegramBot.on('message', (message) => {
             }
             
             if (msg == '/users' && chatID == Config.Telegram.masterChatID) {
-                getCurrentUserListMenuPage().then((userListKeyboard) => {
-                    sendMessageKeyboard(Language.menuUserListTitle, userListKeyboard, chatID);
-                }).catch((err) => {
-                    sendMessage(err, chatID);
+                getUserAmount().then((userAmount) => {
+                    if (userAmount == 'error') sendMessage(Language.errorUnexpected);
+                    if (userAmount > 0) {
+                        getCurrentUserListMenuPage().then((userListKeyboard) => {
+                            sendMessageKeyboard(Language.menuUserListTitle, userListKeyboard, chatID);
+                        }).catch((err) => {
+                            sendMessage(err, chatID);
+                        });
+                    } else {
+                        sendMessage(Language.userEmpty);
+                    }
                 });
             }
         } else {
@@ -168,6 +175,18 @@ TelegramBot.getMe().then(() => {
 }).catch((err) => {
     console.error(err);
 });
+
+function getUserAmount() {
+    return new Promise((resolve, reject) => {
+        UserDB.find({}, (err, users) => {
+            if (err) {
+                console.error(err);
+                reject('error');
+            }
+            resolve(users.length);
+        });
+    });
+}
 
 function getCurrentUserListMenuPage(pageNumber = 1) {
     return new Promise((resolve, reject) => {
