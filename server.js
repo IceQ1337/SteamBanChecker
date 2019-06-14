@@ -153,7 +153,8 @@ TelegramBot.on('inline.callback.query', (message) => {
     });
     
     if (callback_data.startsWith('user-accept-')) {
-        addUser(chatID, messageID, parseInt(callback_data.replace('user-accept-', '')));
+        var username = (message.message.from.username ? message.message.from.username: message.message.from.first_name);
+        addUser(chatID, messageID, parseInt(callback_data.replace('user-accept-', '')), username);
     } else if (callback_data.startsWith('user-deny-')) {
         editMessageText(chatID, messageID, Language.userRequestDeniedMaster);
         sendMessage(Language.userRequestDenied, parseInt(callback_data.replace('user-deny-', '')));
@@ -263,8 +264,8 @@ function openUserActionMenu(chatID, messageID, messageText, userID) {
     editMessageText(chatID, messageID, messageText, userActionKeyboard);
 }
 
-function addUser(chatID, messageID, userID) {
-    UserDB.insert({ chatID: userID }, (err) => {
+function addUser(chatID, messageID, userID, username) {
+    UserDB.insert({ chatID: userID, Username: username }, (err) => {
         if (err) {
             if (err.errorType == 'uniqueViolated') sendMessage(Language.userExists);
             return;
