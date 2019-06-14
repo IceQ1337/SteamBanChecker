@@ -206,7 +206,7 @@ function getCurrentUserListMenuPage(pageNumber = 1) {
             users.forEach((user, index) => {
                 if ((index + 1) >= firstPageEntry && (index + 1) <= lastPageEntry) {
                     var listUpdated = false;
-                    userList.push({ text: user.chatID, callback_data: `user-list-menu-user-${user.chatID}` });
+                    userList.push({ text: user.Username, callback_data: `user-list-menu-user-${user.chatID}` });
                     if (++current >= 3) {
                         userListMenu.push(userList);
                         listUpdated = true;
