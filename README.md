@@ -53,6 +53,10 @@ Adding a profile via customURL will **NOT** work!
 While `allowRequests` is true, everyone can `/request` access to the script and you can either accept or decline the request.  
 Accepted users can `/add` their own profiles. You will not be notified about this.
 
+### Manage Users
+- Type `/users` to receive a list of current users.
+- Tap on the user you want to edit. The rest is relatively self-explanatory.
+
 **How It Operates**
 - The script will check every profile that gets added to the list once to get its initial data.
   - This is because you most-likely have a reason to track it for future bans ignoring old ones.
