@@ -16,6 +16,8 @@
 	"userRequestAcceptedMaster": "Die Anfrage wurde akzeptiert und Rechte wurden vergeben.",
 	"userRequestDenied": "Deine Anfrage wurde abgelehnt!",
 	"userRequestDeniedMaster": "Die Anfrage wurde abgelehnt!",
+	"userRequestRevoked": "Dir wurde soeben der Zugriff entzogen!",
+	"userRequestRevokedMaster": "Der Nutzer wurde erfolgreich entfernt.",
 	"userExists": "Dieser Nutzer hat bereits Zugriff!",
 	"buttonAccept": "Akzeptieren",
 	"buttonDeny": "Ablehnen"
