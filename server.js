@@ -102,6 +102,14 @@ TelegramBot.on('message', (message) => {
                     sendMessage(`${steamID} ${Language.profileInvalid}`, chatID);
                 }
             }
+            
+            if (msg == '/users' && chatID == Config.Telegram.masterChatID) {
+                getCurrentUserListMenuPage().then((userListKeyboard) => {
+                    sendMessageKeyboard(Language.menuUserListTitle, userListKeyboard, chatID);
+                }).catch((err) => {
+                    sendMessage(err, chatID);
+                });
+            }
         } else {
             if (msg == '/start') {
                 sendMessage(Language.userStartInfo, chatID);
@@ -138,12 +146,20 @@ TelegramBot.on('inline.callback.query', (message) => {
     });
     
     if (callback_data.startsWith('user-accept-')) {
-        var userID = parseInt(callback_data.replace('user-accept-', ''));
-        addUser(chatID, messageID, userID);
+        addUser(chatID, messageID, parseInt(callback_data.replace('user-accept-', '')));
     } else if (callback_data.startsWith('user-deny-')) {
-        var userID = callback_data.replace('user-deny-', '');
-        sendMessage(Language.userRequestDeniedMaster);
-        sendMessage(Language.userRequestDenied, userID);
+        editMessageText(chatID, messageID, Language.userRequestDeniedMaster);
+        sendMessage(Language.userRequestDenied, parseInt(callback_data.replace('user-deny-', '')));
+    } else if (callback_data.startsWith('user-list-menu-prev-')) {
+        editUserListMenuPage(chatID, messageID, messageText, parseInt(callback_data.replace('user-list-menu-prev-', '')));
+    } else if (callback_data.startsWith('user-list-menu-next-')) {
+        editUserListMenuPage(chatID, messageID, messageText, parseInt(callback_data.replace('user-list-menu-next-', '')));
+    } else if (callback_data == 'user-list-menu-cancel') {
+        editMessageText(chatID, messageID, Language.menuActionCanceled);
+    } else if (callback_data.startsWith('user-list-menu-user-')) {
+        openUserActionMenu(chatID, messageID, Language.menuActionChoose, parseInt(callback_data.replace('user-list-menu-user-', '')));
+    } else if (callback_data.startsWith('user-action-menu-remove-')) {
+        removeUser(chatID, messageID, parseInt(callback_data.replace('user-action-menu-remove-', '')));
     }
 });
 
@@ -153,10 +169,85 @@ TelegramBot.getMe().then(() => {
     console.error(err);
 });
 
+function getCurrentUserListMenuPage(pageNumber = 1) {
+    return new Promise((resolve, reject) => {
+        UserDB.find({}, (err, users) => {
+            if (err) {
+                console.error(err);
+                reject(Language.errorUnexpected);
+            }
+    
+            var firstPageEntry = (pageNumber - 1)  * 6 + 1;
+            var lastPageEntry = pageNumber * 6;
+    
+            var userListMenu = [];
+            var userList = [];
+            var current = 0;
+            users.forEach((user, index) => {
+                if ((index + 1) >= firstPageEntry && (index + 1) <= lastPageEntry) {
+                    var listUpdated = false;
+                    userList.push({ text: user.chatID, callback_data: `user-list-menu-user-${user.chatID}` });
+                    if (++current >= 3) {
+                        userListMenu.push(userList);
+                        listUpdated = true;
+                        userList = [];
+                        current = 0;
+                    }
+                    if (index === users.length -1 && !listUpdated) userListMenu.push(userList);
+                }
+            });
+    
+            var prevPage = pageNumber - 1;
+            var nextPage = pageNumber + 1;
+
+            var totalPages = Math.ceil(users.length / 6);
+            var menuPaging = [];
+            if (pageNumber == 1) {
+                menuPaging.push({ text: Language.buttonCancel, callback_data: 'user-list-menu-cancel' });
+                if (totalPages > 1) menuPaging.push({ text: '>>', callback_data: `user-list-menu-next-${nextPage}` });
+            } else if (pageNumber == totalPages) {
+                menuPaging.push({ text: '<<', callback_data: `user-list-menu-prev-${prevPage}` });
+                menuPaging.push({ text: Language.buttonCancel, callback_data: 'user-list-menu-cancel' });
+            } else {
+                menuPaging.push({ text: '<<', callback_data: `user-list-menu-prev-${prevPage}` });
+                menuPaging.push({ text: Language.buttonCancel, callback_data: 'user-list-menu-cancel' });
+                menuPaging.push({ text: '>>', callback_data: `user-list-menu-next-${nextPage}` });
+            }
+
+            userListMenu.push(menuPaging);    
+            var userListKeyboard = {
+                inline_keyboard: userListMenu
+            };
+
+            resolve(userListKeyboard);
+        }); 
+    });
+}
+
+function editUserListMenuPage(chatID, messageID, messageText, pageNumber) {
+    getCurrentUserListMenuPage(pageNumber).then((userListKeyboard) => {
+        editMessageText(chatID, messageID, messageText, userListKeyboard);
+    }).catch((err) => {
+        sendMessage(err, chatID);
+    });   
+}
+
+function openUserActionMenu(chatID, messageID, messageText, userID) {
+    userActionMenu = [
+        [
+            { text: Language.buttonRemove, callback_data: `user-action-menu-remove-${userID}` }
+        ]
+    ];
+    var userActionKeyboard = {
+        inline_keyboard: userActionMenu
+    };
+    editMessageText(chatID, messageID, messageText, userActionKeyboard);
+}
+
 function addUser(chatID, messageID, userID) {
     UserDB.insert({ chatID: userID }, (err) => {
         if (err) {
-            if (err.errorType == 'uniqueViolated') sendMessage('User already exists.');
+            if (err.errorType == 'uniqueViolated') sendMessage(Language.userExists);
             return;
         }
         sendMessage(Language.userRequestAccepted, userID);

@@ -20,5 +20,10 @@
 	"userRequestRevokedMaster": "The user has been removed successfully.",
 	"userExists": "This user already has access!",
 	"buttonAccept": "Accept",
-	"buttonDeny": "Deny"
+	"buttonDeny": "Deny",
+	"buttonCancel": "Cancel",
+	"buttonRemove": "Remove",
+	"menuActionChoose": "Choose one of the following actions.",
+	"menuActionCanceled": "The action has been canceled.",
+	"menuUserListTitle": "Current Userlist:"
 }
