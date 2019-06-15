@@ -168,6 +168,8 @@ TelegramBot.on('inline.callback.query', (message) => {
         openUserActionMenu(chatID, messageID, Language.menuActionChoose, parseInt(callback_data.replace('user-list-menu-user-', '')));
     } else if (callback_data.startsWith('user-action-menu-remove-')) {
         removeUser(chatID, messageID, parseInt(callback_data.replace('user-action-menu-remove-', '')));
+    } else if (callback_data == 'user-action-menu-cancel') {
+        editMessageText(chatID, messageID, Language.menuActionCanceled);
     }
 });
 
@@ -256,6 +258,9 @@ function openUserActionMenu(chatID, messageID, messageText, userID) {
     userActionMenu = [
         [
             { text: Language.buttonRemove, callback_data: `user-action-menu-remove-${userID}` }
+        ],
+        [
+            { text: Language.buttonCancel, callback_data: `user-action-menu-cancel` }
         ]
     ];
     var userActionKeyboard = {
