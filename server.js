@@ -125,7 +125,7 @@ TelegramBot.on('message', (message) => {
                     var userRequestKeyboard = {
                         inline_keyboard: [
                             [
-                                { text: Language.buttonAccept, callback_data: `user-accept-${chatID}` },
+                                { text: Language.buttonAccept, callback_data: `user-accept-${chatID}-${username}` },
                                 { text: Language.buttonDeny, callback_data: `user-deny-${chatID}` }
                             ]
                         ]
@@ -153,8 +153,8 @@ TelegramBot.on('inline.callback.query', (message) => {
     });
     
     if (callback_data.startsWith('user-accept-')) {
-        var username = (message.message.from.username ? message.message.from.username: message.message.from.first_name);
-        addUser(chatID, messageID, parseInt(callback_data.replace('user-accept-', '')), username);
+        var userData = callback_data.split("-");
+        addUser(chatID, messageID, parseInt(userData[2]), userData[3]);
     } else if (callback_data.startsWith('user-deny-')) {
         editMessageText(chatID, messageID, Language.userRequestDeniedMaster);
         sendMessage(Language.userRequestDenied, parseInt(callback_data.replace('user-deny-', '')));
