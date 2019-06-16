@@ -86,6 +86,7 @@ TelegramBot.on('message', (message) => {
     var userIDs = [];
     UserDB.find({}, (err, users) => {
         if (err) console.error(err);
+
         users.forEach((user) => {
             userIDs.push(user.chatID);
         });
@@ -105,7 +106,6 @@ TelegramBot.on('message', (message) => {
             
             if (msg == '/users' && chatID == Config.Telegram.masterChatID) {
                 getUserAmount().then((userAmount) => {
-                    if (userAmount == 'error') sendMessage(Language.errorUnexpected);
                     if (userAmount > 0) {
                         getCurrentUserListMenuPage().then((userListKeyboard) => {
                             sendMessageKeyboard(Language.menuUserListTitle, userListKeyboard, chatID);
@@ -115,6 +115,9 @@ TelegramBot.on('message', (message) => {
                     } else {
                         sendMessage(Language.userEmpty);
                     }
+                }).catch((err) => {
+                    console.error(err);
+                    sendMessage(Language.errorUnexpected);
                 });
             }
         } else {
@@ -174,10 +177,7 @@ TelegramBot.getMe().then(() => {
 function getUserAmount() {
     return new Promise((resolve, reject) => {
         UserDB.find({}, (err, users) => {
-            if (err) {
-                console.error(err);
-                reject('error');
-            }
+            if (err) reject('error');
             resolve(users.length);
         });
     });
@@ -265,7 +265,7 @@ function addUser(chatID, messageID, userID, username) {
     UserDB.insert({ chatID: userID, Username: username }, (err) => {
         if (err) {
             if (err.errorType == 'uniqueViolated') sendMessage(Language.userExists);
-            return;
+            console.error(err);
         }
         sendMessage(Language.userRequestAccepted, userID);
         editMessageText(chatID, messageID, Language.userRequestAcceptedMaster);
@@ -282,7 +282,8 @@ function removeUser(chatID, messageID, userID) {
 
 function addProfile(apiURL, chatID) {
     Request(apiURL, (err, response, body) => {
-        if (err) return;
+        if (err) console.error(err);
+
         if (response.statusCode === 200) {
             var apiData = JSON.parse(body);
             if (apiData.players[0].SteamId) {
@@ -342,7 +343,7 @@ function updateProfile(steamID, player, type) {
 
 function getBanData() {
     ProfileDB.find({ Tracked: true }, (err, profiles) => {
-        if (err) return;
+        if (err) console.error(err);
 
         var profileIDs = [];
         profiles.forEach((profile) => {
@@ -351,14 +352,15 @@ function getBanData() {
 
         var apiURL = SteamWebAPIURL + profileIDs.reverse().join();
         Request(apiURL, (err, response, body) => {
-            if (err) return;
+            if (err) console.error(err);
+
             if (response.statusCode === 200) {
                 var apiData = JSON.parse(body);
                 apiData.players.forEach((player) => {
                     var steamID = player.SteamId;
                     var profileURL = SteamProfileURL + steamID;
                     ProfileDB.findOne({ SteamID: steamID }, (err, profile) => {
-                        if (err) return;
+                        if (err) console.error(err);
                         if (profile == null) return;
 
                         if (player.CommunityBanned && !profile.CommunityBanned) {
