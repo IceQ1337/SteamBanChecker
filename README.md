@@ -66,7 +66,7 @@ Accepted users can `/add` their own profiles. You will not be notified about thi
   - This includes the following ban types: Community Ban, VAC Ban, Game Ban.
   - A banned profile will no longer get checked if it got banned. (Exception: Community Ban)
 
-All data is stored in a readable database called `profiles.db`
+All data is stored in a readable database files called `profiles.db` and `users.db`
 
 ## Retrieve your Telegram Chat ID
 In order to retrieve your unique Telegram Chat ID, do as follows:
