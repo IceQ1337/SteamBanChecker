@@ -91,7 +91,8 @@ TelegramBot.on('message', (message) => {
             userIDs.push(user.chatID);
         });
 
-        if (chatID == Config.Telegram.masterChatID || userIDs.includes(chatID.toString())) {
+
+        if (chatID == Config.Telegram.masterChatID || userIDs.includes(parseInt(chatID))) {
             if (msg.startsWith('/add')) {
                 var steamID = msg.replace('/add ', '');
                 if (steamID.match(REGEX_STEAMID64)) {
@@ -304,10 +305,12 @@ function addProfile(apiURL, chatID) {
                                     });
                                 }
                             });
+                        } else {
+                            sendMessage(Language.errorUpdatingDB, chatID);
                         }
-                        return;
+                    } else {
+                        sendMessage(`${player.SteamId} ${Language.profileAdded}`, chatID);
                     }
-                    sendMessage(`${player.SteamId} ${Language.profileAdded}`, chatID);
                 });
             } else {
                 sendMessage(Language.errorUnexpected, chatID);
