@@ -115,8 +115,7 @@ TelegramBot.on('message', (message) => {
                     } else {
                         sendMessage(Language.userEmpty);
                     }
-                }).catch((err) => {
-                    console.error(err);
+                }).catch(() => {
                     sendMessage(Language.errorUnexpected);
                 });
             }
