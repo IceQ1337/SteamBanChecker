@@ -1,3 +1,5 @@
+.vs/
 node_modules/
 config.json
 profiles.db
+users.db
