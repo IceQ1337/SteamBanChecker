@@ -143,14 +143,6 @@ TelegramBot.on('inline.callback.query', (message) => {
     var messageID = message.message.message_id;
     var messageText = message.message.text;
     var callback_data = message.data;
-
-    TelegramBot.editMessageReplyMarkup({
-        chat_id: message.message.chat.id,
-        message_id: message.message.message_id,
-        reply_markup: JSON.stringify({ inline_keyboard: [] })
-    }).catch((err) => {
-        console.error(err);
-    });
     
     if (callback_data.startsWith('user-accept-')) {
         var userData = callback_data.split("-");
