@@ -44,10 +44,12 @@ In order to use this bot, you need the following dependencies and tokens:
 ## Usage
 ### Adding Profiles
 - Use `/add <steamID64|profileURL>` to add profiles to the list.
-  - Example: `/add 12345678912345678` or `/add http://steamcommunity.com/profiles/12345678912345678`
+  - Examples:
+    - `/add 12345678912345678`
+	- `/add http://steamcommunity.com/profiles/12345678912345678`
+    - `/add https://steamcommunity.com/id/customURL`
 
 To get the steamID64 or URL of a profile you can use websites like [STEAMID I/O](https://steamid.io/).  
-Adding a profile via customURL will **NOT** work!
 
 ### Adding Users
 While `allowRequests` is true, everyone can `/request` access to the script and you can either accept or decline the request.  

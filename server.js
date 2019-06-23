@@ -1,5 +1,6 @@
 const Path = require('path');
 const Request = require('request');
+const XML = require('xml2js'); 
 const Config = require(Path.join(__dirname, 'config.json'));
 const Language = require(Path.join(__dirname, `/localization/${Config.General.language}.json`));
 
@@ -19,6 +20,7 @@ const SteamWebAPIURL = `http://api.steampowered.com/ISteamUser/GetPlayerBans/v1/
 const REGEX_STEAMURL = /^(http|https):\/\/steamcommunity.com\/profiles\//;
 const REGEX_STEAMID64 = /^[0-9]{17}$/;
 const REGEX_STEAMURL64 = /^(http|https):\/\/steamcommunity.com\/profiles\/[0-9]{17}$/;
+const REGEX_STEAMCUSTOMURL = /^(http|https):\/\/steamcommunity.com\/id\//;
 
 const Datastore = require('nedb');
 const ProfileDB = new Datastore({ filename: Path.join(__dirname, 'profiles.db'), autoload: true });
@@ -91,7 +93,6 @@ TelegramBot.on('message', (message) => {
             userIDs.push(user.chatID);
         });
 
-
         if (chatID == Config.Telegram.masterChatID || userIDs.includes(parseInt(chatID))) {
             if (msg.startsWith('/add')) {
                 var steamID = msg.replace('/add ', '');
@@ -100,6 +101,12 @@ TelegramBot.on('message', (message) => {
                 } else if (steamID.match(REGEX_STEAMURL64)) {
                     var steamID64 = steamID.replace(REGEX_STEAMURL, '');
                     addProfile(SteamWebAPIURL + steamID64, chatID);
+                } else if (steamID.match(REGEX_STEAMCUSTOMURL)) {
+                    resolveCustomURL(steamID).then((steamID64) => {
+                        addProfile(SteamWebAPIURL + steamID64, chatID);
+                    }).catch(() => {
+                        sendMessage(`${steamID} ${Language.errorUnexpected}`, chatID);
+                    });
                 } else {
                     sendMessage(`${steamID} ${Language.profileInvalid}`, chatID);
                 }
@@ -277,6 +284,23 @@ function removeUser(chatID, messageID, userID) {
         if (err) console.error(err);
         sendMessage(Language.userRequestRevoked, userID);
         editMessageText(chatID, messageID, Language.userRequestRevokedMaster);
+    });
+}
+
+function resolveCustomURL(customURL) {
+    return new Promise((resolve, reject) => {
+        Request(customURL + '?xml=1', (err, response, body) => {
+            if (err) reject(err);
+
+            if (response.statusCode === 200) {
+                XML.parseString(body, (err, result) => {
+                    if (err) reject(err);
+                    resolve(parseInt(result.profile.steamID64[0]));
+                });
+            } else {
+                reject();
+            }
+        });
     });
 }
 
