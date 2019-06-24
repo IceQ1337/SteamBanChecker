@@ -1,6 +1,6 @@
 {
   "name": "steambanchecker",
-  "version": "1.0.0",
+  "version": "1.0.42",
   "description": "Periodically checks given steam-profiles for various bans and informs you via telegram bot.",
   "main": "server.js",
   "scripts": {
