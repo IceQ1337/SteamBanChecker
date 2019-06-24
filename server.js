@@ -3,6 +3,16 @@ const Request = require('request');
 const XML = require('xml2js'); 
 const Config = require(Path.join(__dirname, 'config.json'));
 const Language = require(Path.join(__dirname, `/localization/${Config.General.language}.json`));
+const Version = require('./package.json').version;
+
+Request('https://raw.githubusercontent.com/IceQ1337/SteamBanChecker/master/package.json', (err, response, body) => {
+    if (err) console.error(err);
+    if (response.statusCode === 200) {
+        let newVersion = JSON.parse(body).version;
+        if (Version != newVersion)
+            console.warn(`${Language.updateAvailable} (${Version} ==> ${newVersion})`);
+    }
+});
 
 if (Config == null) {
     console.error('Missing config information. Exiting now.');

@@ -1,4 +1,5 @@
 {
+	"updateAvailable": "Es ist eine neue Version dieses Scripts auf GitHub verfügbar!",
 	"errorUnexpected": "Ein unerwarteter Fehler ist aufgetreten. Bitte versuche es erneut.",
 	"errorUpdatingDB": "Beim Aktualisieren der Datenbank ist ein unerwarteter Fehler aufgetreten.",
 	"profileInvalid": "ist ungültig und wurde NICHT zur Liste hinzugefügt!",
