@@ -106,6 +106,7 @@ TelegramBot.on('message', (message) => {
         if (chatID == Config.Telegram.masterChatID || userIDs.includes(parseInt(chatID))) {
             if (msg.startsWith('/add')) {
                 var steamID = msg.replace('/add ', '');
+                if (steamID.endsWith('/')) steamID = steamID.slice(0, -1);
                 if (steamID.match(REGEX_STEAMID64)) {
                     addProfile(SteamWebAPIURL + steamID, chatID);
                 } else if (steamID.match(REGEX_STEAMURL64)) {
