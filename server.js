@@ -191,6 +191,7 @@ TelegramBot.getMe().then(() => {
 }).catch((err) => {
     console.error(err);
 });
+TelegramBot.on('polling_error', (err) => { console.error(err); });
 
 function getUserAmount() {
     return new Promise((resolve, reject) => {
