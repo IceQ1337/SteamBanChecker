@@ -95,7 +95,7 @@ TelegramBot.on('message', (message) => {
     var messageID = message.message_id;
     if (messageID != currentMessageID) {
         currentMessageID = messageID;
-        
+
         var username = (message.from.username ? `@${message.from.username}` : message.from.first_name);
         var chatID = message.from.id;
         var msg = message.text;
@@ -142,6 +142,10 @@ TelegramBot.on('message', (message) => {
                     }).catch(() => {
                         sendMessage(Language.errorUnexpected);
                     });
+                }
+
+                if (msg == '/version' && chatID == Config.Telegram.masterChatID) {
+                    sendMessage(Version);
                 }
             } else {
                 if (msg == '/start') {
