@@ -97,7 +97,7 @@ In order to contribute to the project, please follow the **GitHub Standard Fork 
 ## Used Node.js Modules
 - [NeDB](https://github.com/louischatriot/nedb)
 - [Request](https://github.com/request/request)
-- [Node.js Telegram Bot API](https://github.com/yagop/node-telegram-bot-api)
+- [Node.js Telegram Bot API](https://github.com/mast/telegram-bot-api)
 - [XML2JS](https://github.com/Leonidas-from-XIV/node-xml2js)
 
 ## Donating
