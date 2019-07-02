@@ -46,7 +46,6 @@ UserDB.ensureIndex({ fieldName: 'chatID', unique: true }, (err) => {
 
 const Telegram = require('telegram-bot-api');
 const TelegramBot = new Telegram({ token: Config.Telegram.botToken, updates: { enabled: true } });
-var currentMessageID = 0;
 
 function sendMessage(messageText, chatID = Config.Telegram.masterChatID) {
     if (Array.isArray(chatID)) {
