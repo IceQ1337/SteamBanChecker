@@ -312,7 +312,7 @@ function resolveCustomURL(customURL) {
             if (response.statusCode === 200) {
                 XML.parseString(body, (err, result) => {
                     if (err) reject(err);
-                    resolve(parseInt(result.profile.steamID64[0]));
+                    resolve(result.profile.steamID64[0]);
                 });
             } else {
                 reject();
