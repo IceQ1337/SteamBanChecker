@@ -19,7 +19,7 @@ if (Config == null) {
     process.exitCode = 1;
 }
 
-if (Language == null) {
+if (Messages == null) {
     console.error('Message File Missing. Exiting now.');
     process.exitCode = 1;
 }
