@@ -26,7 +26,8 @@ In order to use this bot, you need the following dependencies and tokens:
 ## Updating
 ### This project has no guaranteed backward compatibility!
 
-If the file structure changes during an update, a local installation must be manually adjusted. In most cases, files only have to be moved or renamed.
+If the file structure changes during an update, a local installation must be manually adjusted.  
+In most cases, files only have to be moved or renamed.
 
 ## Configuration
 ```Javascript
