@@ -39,7 +39,7 @@ In order to use this bot, you need the following dependencies and tokens:
 		"masterChatID": "Telegram Chat ID" // Your Telegram Chat ID
 	},
 	"Screenshot": {
-		"takeScreenshot": false, // [Taking Profile Screenshots](#taking-profile-screenshots)
+		"takeScreenshot": false, // Explanation Below
 		"sendScreenshot": true,
 		"saveScreenshot": true
 	}
