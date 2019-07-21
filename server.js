@@ -2,7 +2,7 @@ const Path = require('path');
 const Request = require('request');
 const XML = require('xml2js'); 
 const Config = require(Path.join(__dirname, '/data/config.json'));
-const Language = require(Path.join(__dirname, `/data/messages/${Config.General.language}.json`));
+const Messages = require(Path.join(__dirname, `/data/messages/${Config.General.messages}.json`));
 const Version = require('./package.json').version;
 
 Request('https://raw.githubusercontent.com/IceQ1337/SteamBanChecker/master/package.json', (err, response, body) => {
@@ -10,7 +10,7 @@ Request('https://raw.githubusercontent.com/IceQ1337/SteamBanChecker/master/packa
     if (response.statusCode === 200) {
         let newVersion = JSON.parse(body).version;
         if (Version != newVersion)
-            console.warn(`${Language.updateAvailable} (${Version} ==> ${newVersion})`);
+            console.warn(`${Messages.updateAvailable} (${Version} ==> ${newVersion})`);
     }
 });
 
@@ -33,8 +33,8 @@ const REGEX_STEAMURL64 = /^(http|https):\/\/steamcommunity.com\/profiles\/[0-9]{
 const REGEX_STEAMCUSTOMURL = /^(http|https):\/\/steamcommunity.com\/id\//;
 
 const Datastore = require('nedb');
-const ProfileDB = new Datastore({ filename: Path.join(__dirname, 'profiles.db'), autoload: true });
-const UserDB = new Datastore({ filename: Path.join(__dirname, 'users.db'), autoload: true });
+const ProfileDB = new Datastore({ filename: Path.join(__dirname, '/data/db/profiles.db'), autoload: true });
+const UserDB = new Datastore({ filename: Path.join(__dirname, '/data/db/users.db'), autoload: true });
 
 ProfileDB.ensureIndex({ fieldName: 'SteamID', unique: true }, (err) => {
     if (err) console.error(err);
@@ -117,10 +117,10 @@ TelegramBot.on('message', (message) => {
                     resolveCustomURL(steamID).then((steamID64) => {
                         addProfile(SteamWebAPIURL + steamID64, chatID);
                     }).catch(() => {
-                        sendMessage(`${steamID} ${Language.errorUnexpected}`, chatID);
+                        sendMessage(`${steamID} ${Messages.errorUnexpected}`, chatID);
                     });
                 } else {
-                    sendMessage(`${steamID} ${Language.profileInvalid}`, chatID);
+                    sendMessage(`${steamID} ${Messages.profileInvalid}`, chatID);
                 }
             }
             
@@ -128,15 +128,15 @@ TelegramBot.on('message', (message) => {
                 getUserAmount().then((userAmount) => {
                     if (userAmount > 0) {
                         getCurrentUserListMenuPage().then((userListKeyboard) => {
-                            sendMessageKeyboard(Language.menuUserListTitle, userListKeyboard, chatID);
+                            sendMessageKeyboard(Messages.menuUserListTitle, userListKeyboard, chatID);
                         }).catch((err) => {
                             sendMessage(err, chatID);
                         });
                     } else {
-                        sendMessage(Language.userEmpty);
+                        sendMessage(Messages.userEmpty);
                     }
                 }).catch(() => {
-                    sendMessage(Language.errorUnexpected);
+                    sendMessage(Messages.errorUnexpected);
                 });
             }
 
@@ -145,19 +145,19 @@ TelegramBot.on('message', (message) => {
             }
         } else {
             if (msg == '/start') {
-                sendMessage(Language.userStartInfo, chatID);
+                sendMessage(Messages.userStartInfo, chatID);
             } else if (msg == '/request') {
                 if (Config.General.allowRequests) {
                     var userRequestKeyboard = {
                         inline_keyboard: [
                             [
-                                { text: Language.buttonAccept, callback_data: `user-accept-${chatID}-${username}` },
-                                { text: Language.buttonDeny, callback_data: `user-deny-${chatID}` }
+                                { text: Messages.buttonAccept, callback_data: `user-accept-${chatID}-${username}` },
+                                { text: Messages.buttonDeny, callback_data: `user-deny-${chatID}` }
                             ]
                         ]
                     };
-                    sendMessage(Language.userRequestSend, chatID);
-                    sendMessageKeyboard(`${username} ${Language.userRequestSendMaster}`, userRequestKeyboard);
+                    sendMessage(Messages.userRequestSend, chatID);
+                    sendMessageKeyboard(`${username} ${Messages.userRequestSendMaster}`, userRequestKeyboard);
                 }
             }
         }
@@ -174,20 +174,20 @@ TelegramBot.on('inline.callback.query', (message) => {
         var userData = callback_data.split("-");
         addUser(chatID, messageID, parseInt(userData[2]), userData[3]);
     } else if (callback_data.startsWith('user-deny-')) {
-        editMessageText(chatID, messageID, Language.userRequestDeniedMaster);
-        sendMessage(Language.userRequestDenied, parseInt(callback_data.replace('user-deny-', '')));
+        editMessageText(chatID, messageID, Messages.userRequestDeniedMaster);
+        sendMessage(Messages.userRequestDenied, parseInt(callback_data.replace('user-deny-', '')));
     } else if (callback_data.startsWith('user-list-menu-prev-')) {
         editUserListMenuPage(chatID, messageID, messageText, parseInt(callback_data.replace('user-list-menu-prev-', '')));
     } else if (callback_data.startsWith('user-list-menu-next-')) {
         editUserListMenuPage(chatID, messageID, messageText, parseInt(callback_data.replace('user-list-menu-next-', '')));
     } else if (callback_data == 'user-list-menu-cancel') {
-        editMessageText(chatID, messageID, Language.menuActionCanceled);
+        editMessageText(chatID, messageID, Messages.menuActionCanceled);
     } else if (callback_data.startsWith('user-list-menu-user-')) {
-        openUserActionMenu(chatID, messageID, Language.menuActionChoose, parseInt(callback_data.replace('user-list-menu-user-', '')));
+        openUserActionMenu(chatID, messageID, Messages.menuActionChoose, parseInt(callback_data.replace('user-list-menu-user-', '')));
     } else if (callback_data.startsWith('user-action-menu-remove-')) {
         removeUser(chatID, messageID, parseInt(callback_data.replace('user-action-menu-remove-', '')));
     } else if (callback_data == 'user-action-menu-cancel') {
-        editMessageText(chatID, messageID, Language.menuActionCanceled);
+        editMessageText(chatID, messageID, Messages.menuActionCanceled);
     }
 });
 
@@ -212,7 +212,7 @@ function getCurrentUserListMenuPage(pageNumber = 1) {
         UserDB.find({}, (err, users) => {
             if (err) {
                 console.error(err);
-                reject(Language.errorUnexpected);
+                reject(Messages.errorUnexpected);
             }
     
             var firstPageEntry = (pageNumber - 1)  * 6 + 1;
@@ -241,14 +241,14 @@ function getCurrentUserListMenuPage(pageNumber = 1) {
             var totalPages = Math.ceil(users.length / 6);
             var menuPaging = [];
             if (pageNumber == 1) {
-                menuPaging.push({ text: Language.buttonCancel, callback_data: 'user-list-menu-cancel' });
+                menuPaging.push({ text: Messages.buttonCancel, callback_data: 'user-list-menu-cancel' });
                 if (totalPages > 1) menuPaging.push({ text: '>>', callback_data: `user-list-menu-next-${nextPage}` });
             } else if (pageNumber == totalPages) {
                 menuPaging.push({ text: '<<', callback_data: `user-list-menu-prev-${prevPage}` });
-                menuPaging.push({ text: Language.buttonCancel, callback_data: 'user-list-menu-cancel' });
+                menuPaging.push({ text: Messages.buttonCancel, callback_data: 'user-list-menu-cancel' });
             } else {
                 menuPaging.push({ text: '<<', callback_data: `user-list-menu-prev-${prevPage}` });
-                menuPaging.push({ text: Language.buttonCancel, callback_data: 'user-list-menu-cancel' });
+                menuPaging.push({ text: Messages.buttonCancel, callback_data: 'user-list-menu-cancel' });
                 menuPaging.push({ text: '>>', callback_data: `user-list-menu-next-${nextPage}` });
             }
 
@@ -273,10 +273,10 @@ function editUserListMenuPage(chatID, messageID, messageText, pageNumber) {
 function openUserActionMenu(chatID, messageID, messageText, userID) {
     userActionMenu = [
         [
-            { text: Language.buttonRemove, callback_data: `user-action-menu-remove-${userID}` }
+            { text: Messages.buttonRemove, callback_data: `user-action-menu-remove-${userID}` }
         ],
         [
-            { text: Language.buttonCancel, callback_data: `user-action-menu-cancel` }
+            { text: Messages.buttonCancel, callback_data: `user-action-menu-cancel` }
         ]
     ];
     var userActionKeyboard = {
@@ -288,19 +288,19 @@ function openUserActionMenu(chatID, messageID, messageText, userID) {
 function addUser(chatID, messageID, userID, username) {
     UserDB.insert({ chatID: userID, Username: username }, (err) => {
         if (err) {
-            if (err.errorType == 'uniqueViolated') sendMessage(Language.userExists);
+            if (err.errorType == 'uniqueViolated') sendMessage(Messages.userExists);
             console.error(err);
         }
-        sendMessage(Language.userRequestAccepted, userID);
-        editMessageText(chatID, messageID, Language.userRequestAcceptedMaster);
+        sendMessage(Messages.userRequestAccepted, userID);
+        editMessageText(chatID, messageID, Messages.userRequestAcceptedMaster);
     });   
 }
 
 function removeUser(chatID, messageID, userID) {
     UserDB.remove({ chatID: userID }, {}, (err) => {
         if (err) console.error(err);
-        sendMessage(Language.userRequestRevoked, userID);
-        editMessageText(chatID, messageID, Language.userRequestRevokedMaster);
+        sendMessage(Messages.userRequestRevoked, userID);
+        editMessageText(chatID, messageID, Messages.userRequestRevokedMaster);
     });
 }
 
@@ -333,31 +333,31 @@ function addProfile(apiURL, chatID) {
                     if (err) {
                         if (err.errorType == 'uniqueViolated') {
                             ProfileDB.findOne({ SteamID: player.SteamId }, (err, profile) => {
-                                if (err) console.error(Language.errorUpdatingDB);
+                                if (err) console.error(Messages.errorUpdatingDB);
                                 if (profile == null) return;
 
                                 if (profile.Users.includes(chatID)) {
-                                    sendMessage(`${player.SteamId} ${Language.profileExists}`, chatID);
+                                    sendMessage(`${player.SteamId} ${Messages.profileExists}`, chatID);
                                 } else {
                                     profile.Users.push(chatID);
                                     ProfileDB.update({ SteamID: player.SteamId }, { $set: { Users: profile.Users } }, {}, (err) => {
-                                        if (err) console.error(Language.errorUpdatingDB);
-                                        sendMessage(`${player.SteamId} ${Language.profileAdded}`, chatID);
+                                        if (err) console.error(Messages.errorUpdatingDB);
+                                        sendMessage(`${player.SteamId} ${Messages.profileAdded}`, chatID);
                                     });
                                 }
                             });
                         } else {
-                            sendMessage(Language.errorUpdatingDB, chatID);
+                            sendMessage(Messages.errorUpdatingDB, chatID);
                         }
                     } else {
-                        sendMessage(`${player.SteamId} ${Language.profileAdded}`, chatID);
+                        sendMessage(`${player.SteamId} ${Messages.profileAdded}`, chatID);
                     }
                 });
             } else {
-                sendMessage(Language.errorUnexpected, chatID);
+                sendMessage(Messages.errorUnexpected, chatID);
             }
         } else {
-            sendMessage(Language.errorUnexpected, chatID);
+            sendMessage(Messages.errorUnexpected, chatID);
         }
     });
 }
@@ -366,17 +366,17 @@ function updateProfile(steamID, player, type) {
     switch(type) {
         case 'community':
             ProfileDB.update({ SteamID: steamID }, { $set: { CommunityBanned: player.CommunityBanned } }, {}, (err) => {
-                if (err) console.error(Language.errorUpdatingDB);
+                if (err) console.error(Messages.errorUpdatingDB);
             });
             break;
         case 'vac':
             ProfileDB.update({ SteamID: steamID }, { $set: { VACBanned: player.VACBanned, NumberOfVACBans: player.NumberOfVACBans, Tracked: false } }, {}, (err) => {
-                if (err) console.error(Language.errorUpdatingDB);
+                if (err) console.error(Messages.errorUpdatingDB);
             });
             break;
         case 'game':
             ProfileDB.update({ SteamID: steamID }, { $set: { NumberOfGameBans: player.NumberOfGameBans, Tracked: false } }, {}, (err) => {
-                if (err) console.error(Language.errorUpdatingDB);
+                if (err) console.error(Messages.errorUpdatingDB);
             });
             break;
         default:
@@ -408,23 +408,23 @@ function getBanData() {
 
                         if (player.CommunityBanned && !profile.CommunityBanned) {
                             updateProfile(steamID, player, 'community');
-                            sendMessage(`${profileURL}\n${Language.profileCommunityBanned}`, profile.Users);
+                            sendMessage(`${profileURL}\n${Messages.profileCommunityBanned}`, profile.Users);
                         }
 
                         if (player.VACBanned && !profile.VACBanned) {
                             updateProfile(steamID, player, 'vac');
-                            sendMessage(`${profileURL}\n${Language.profileVACBanned}`, profile.Users);
+                            sendMessage(`${profileURL}\n${Messages.profileVACBanned}`, profile.Users);
                         } else if (player.VACBanned && player.NumberOfVACBans > profile.NumberOfVACBans) {
                             updateProfile(steamID, player, 'vac');
-                            sendMessage(`${profileURL}\n${Language.profileVACBannedAgain}`, profile.Users);                        
+                            sendMessage(`${profileURL}\n${Messages.profileVACBannedAgain}`, profile.Users);                        
                         }
 
                         if (player.NumberOfGameBans > profile.NumberOfGameBans && profile.NumberOfGameBans > 0) {
                             updateProfile(steamID, player, 'game');
-                            sendMessage(`${profileURL}\n${Language.profileGameBannedAgain}`, profile.Users);
+                            sendMessage(`${profileURL}\n${Messages.profileGameBannedAgain}`, profile.Users);
                         } else if (player.NumberOfGameBans > profile.NumberOfGameBans) {
                             updateProfile(steamID, player, 'game');
-                            sendMessage(`${profileURL}\n${Language.profileGameBanned}`, profile.Users);
+                            sendMessage(`${profileURL}\n${Messages.profileGameBanned}`, profile.Users);
                         }
                     });
                 });
