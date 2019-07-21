@@ -28,7 +28,7 @@ In order to use this bot, you need the following dependencies and tokens:
 {
 	"General": {
 		"allowRequests": true, // Allow telegram users to /request access
-		"language": "en", // Language Code (must match a file in the localization folder)
+		"messages": "default", // Message File (must match a file in the messages folder)
 		"checkInterval": 15 // Check-Interval in Minutes
 	},
 	"Steam": {

@@ -1,7 +1,7 @@
 {
 	"General": {
 		"allowRequests": true,
-		"language": "en",
+		"messages": "default",
 		"checkInterval": 15
 	},
 	"Steam": {
