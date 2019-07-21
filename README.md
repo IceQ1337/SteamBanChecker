@@ -29,7 +29,7 @@ In order to use this bot, you need the following dependencies and tokens:
 	"General": {
 		"allowRequests": true, // Allow telegram users to /request access
 		"messages": "default", // Message File (must match a file in the messages folder)
-		"checkInterval": 15 // Check-Interval in Minutes
+		"checkInterval": 10 // Check-Interval in Minutes
 	},
 	"Steam": {
 		"apiKey": "STEAM API KEY" // Your Steam API Key

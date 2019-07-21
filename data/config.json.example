@@ -2,7 +2,7 @@
 	"General": {
 		"allowRequests": true,
 		"messages": "default",
-		"checkInterval": 15
+		"checkInterval": 10
 	},
 	"Steam": {
 		"apiKey": "STEAM API KEY"
