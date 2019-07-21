@@ -37,6 +37,11 @@ In order to use this bot, you need the following dependencies and tokens:
 	"Telegram": {
 		"botToken": "Telegram Bot Token", // Your Telegram Bot Token
 		"masterChatID": "Telegram Chat ID" // Your Telegram Chat ID
+	},
+	"Screenshot": {
+		"takeScreenshot": false, // [Taking Profile Screenshots](#taking-profile-screenshots)
+		"sendScreenshot": true,
+		"saveScreenshot": true
 	}
 }
 ```
@@ -69,6 +74,13 @@ Accepted users can `/add` their own profiles. You will not be notified about thi
   - A banned profile will no longer get checked if it got banned. (Exception: Community Ban)
 
 All data is stored in a readable database files called `profiles.db` and `users.db`
+
+### Taking Profile Screenshots
+**This only applies to displayed bans like VAC and Game Bans.**  
+- If `takeScreenshot` is enabled, a profile screenshot will be taken after ban detection.
+- If both `sendScreenshot` and `saveScreenshot` are disabled, no screenshot will be taken.
+- If `sendScreenshot` is enabled, the screenshot will be sent via Telegram Bot.
+- If `saveScreenshot` is enabled, the screenshot will be saved, otherwise it gets deleted.
 
 ## Retrieve your Telegram Chat ID
 In order to retrieve your unique Telegram Chat ID, do as follows:
