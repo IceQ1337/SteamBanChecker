@@ -14,7 +14,7 @@ In order to use this bot, you need the following dependencies and tokens:
 ## Installation
 - Make sure you have the latest version of [Node.js](https://nodejs.org/) installed.
 - Download this repository as a ZIP file and unpack it wherever you like.
-- Rename `config.json.example` to `config.json`
+- Go into the `data` folder and rename `config.json.example` to `config.json`
 - Edit `config.json` and fill in your **Steam API Key**, **Telegram Bot Token** and **Telegram Chat ID**
 - Type `npm install` into your console of choice to install Node.js dependencies
 - Type `npm start` or `node server.js` to start the bot.

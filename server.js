@@ -1,8 +1,8 @@
 const Path = require('path');
 const Request = require('request');
 const XML = require('xml2js'); 
-const Config = require(Path.join(__dirname, 'config.json'));
-const Language = require(Path.join(__dirname, `/messages/${Config.General.language}.json`));
+const Config = require(Path.join(__dirname, '/data/config.json'));
+const Language = require(Path.join(__dirname, `/data/messages/${Config.General.language}.json`));
 const Version = require('./package.json').version;
 
 Request('https://raw.githubusercontent.com/IceQ1337/SteamBanChecker/master/package.json', (err, response, body) => {
