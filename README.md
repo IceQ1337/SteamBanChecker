@@ -20,12 +20,11 @@ In order to use this bot, you need the following dependencies and tokens:
 - Type `npm start` or `node server.js` to start the bot.
   - To find out how to run the script permanently on a server you should check out [forever](https://github.com/foreversd/forever)
 
-The script does not properly check if your config is valid or has missing information. Make sure you have everything set up properly!
-{: .alert .alert-warning}
+**The script does not properly check if your config is valid or has missing information.**  
+**Make sure you have everything set up properly!**  
 
 ## Updating
-This project has no guaranteed backward compatibility!
-{: .alert .alert-danger}
+### This project has no guaranteed backward compatibility!
 
 If the file structure changes during an update, a local installation must be manually adjusted. In most cases, files only have to be moved or renamed.
 
