@@ -1,6 +1,8 @@
 const Path = require('path');
 const Request = require('request');
-const XML = require('xml2js'); 
+const XML = require('xml2js');
+const Webshot = require('webshot');
+const FS = require('fs');
 const Config = require(Path.join(__dirname, '/data/config.json'));
 const Messages = require(Path.join(__dirname, `/data/messages/${Config.General.messages}.json`));
 const Version = require('./package.json').version;
@@ -68,6 +70,36 @@ function sendMessage(messageText, chatID = Config.Telegram.masterChatID) {
             console.error(err);
         });
     }
+}
+
+function sendPhoto(photoCaption, photoPath, chatID = Config.Telegram.masterChatID) {
+    return new Promise((resolve, reject) => {
+        if (Array.isArray(chatID)) {
+            var users = 0;
+            chatID.forEach((userID) => {
+                TelegramBot.sendPhoto({
+                    chat_id: userID,
+                    caption: photoCaption,
+                    photo: photoPath
+                }).then(() => {
+                    users++;
+                    if (users == chatID.length) resolve();
+                }).catch((err) => {
+                    reject(err);
+                });
+            });
+        } else {
+            TelegramBot.sendPhoto({
+                chat_id: chatID,
+                caption: photoCaption,
+                photo: photoPath
+            }).then(() => {
+                resolve();
+            }).catch((err) => {
+                reject(err);
+            });
+        }
+    });
 }
 
 function sendMessageKeyboard(messageText, inlineKeyboard, chatID = Config.Telegram.masterChatID) {
@@ -384,6 +416,37 @@ function updateProfile(steamID, player, type) {
     }
 }
 
+function takeScreenshot(url, path) {
+    return new Promise((resolve, reject) => {
+        var options = { screenSize: {width: 1024, height: 768}, shotSize: {width: 'window', height: 950}};
+        Webshot(url, path, options, (err) => {
+            if (err) reject(err);
+            resolve();
+        });;
+    });
+}
+
+function handleDisplayedBan(steamID, profileURL, banMessage, users) {
+    if (Config.Screenshot.takeScreenshot && (Config.Screenshot.sendScreenshot || Config.Screenshot.saveScreenshot)) {
+        var screenshotPath = `data/screenshots/${steamID}.png`;
+        takeScreenshot(profileURL, screenshotPath).then(() => {
+            if (Config.Screenshot.sendScreenshot) {
+                sendPhoto(`${profileURL}\n${banMessage}`, screenshotPath, users).then(() => {
+                    if (!Config.Screenshot.saveScreenshot) FS.unlinkSync(screenshotPath);
+                }).catch((err) => {
+                    console.error(err);
+                });
+            } else {
+                sendMessage(`${profileURL}\n${banMessage}`, users);
+            }
+        }).catch((err) => {
+            sendMessage(err, chatID);
+        }); 
+    } else {
+        sendMessage(`${profileURL}\n${banMessage}`, users);
+    }
+}
+
 function getBanData() {
     ProfileDB.find({ Tracked: true }, (err, profiles) => {
         if (err) console.error(err);
@@ -413,18 +476,18 @@ function getBanData() {
 
                         if (player.VACBanned && !profile.VACBanned) {
                             updateProfile(steamID, player, 'vac');
-                            sendMessage(`${profileURL}\n${Messages.profileVACBanned}`, profile.Users);
+                            handleDisplayedBan(steamID, profileURL, Messages.profileVACBanned, profile.Users);
                         } else if (player.VACBanned && player.NumberOfVACBans > profile.NumberOfVACBans) {
                             updateProfile(steamID, player, 'vac');
-                            sendMessage(`${profileURL}\n${Messages.profileVACBannedAgain}`, profile.Users);                        
+                            handleDisplayedBan(steamID, profileURL, Messages.profileVACBannedAgain, profile.Users);                       
                         }
 
                         if (player.NumberOfGameBans > profile.NumberOfGameBans && profile.NumberOfGameBans > 0) {
                             updateProfile(steamID, player, 'game');
-                            sendMessage(`${profileURL}\n${Messages.profileGameBannedAgain}`, profile.Users);
+                            handleDisplayedBan(profileURL, Messages.profileGameBannedAgain, profile.Users);   
                         } else if (player.NumberOfGameBans > profile.NumberOfGameBans) {
                             updateProfile(steamID, player, 'game');
-                            sendMessage(`${profileURL}\n${Messages.profileGameBanned}`, profile.Users);
+                            handleDisplayedBan(steamID, profileURL, Messages.profileGameBanned, profile.Users);   
                         }
                     });
                 });
