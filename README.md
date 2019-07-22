@@ -45,7 +45,7 @@ In most cases, files only have to be moved or renamed.
 		"masterChatID": "Telegram Chat ID" // Your Telegram Chat ID
 	},
 	"Screenshot": {
-		"takeScreenshot": false, // Explanation Below
+		"takeScreenshot": false, // Take Profile-Screenshots (Explanation Below)
 		"sendScreenshot": true,
 		"saveScreenshot": true
 	}

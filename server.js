@@ -418,7 +418,7 @@ function updateProfile(steamID, player, type) {
 
 function takeScreenshot(url, path) {
     return new Promise((resolve, reject) => {
-        var options = { screenSize: {width: 1024, height: 768}, shotSize: {width: 'window', height: 950}};
+        var options = { screenSize: {width: 1024, height: 768}, shotSize: {width: 'window', height: 'window'}};
         Webshot(url, path, options, (err) => {
             if (err) reject(err);
             resolve();
