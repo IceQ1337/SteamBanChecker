@@ -29,10 +29,10 @@ if (Messages == null) {
 const SteamProfileURL = 'https://steamcommunity.com/profiles/';
 const SteamWebAPIURL = `http://api.steampowered.com/ISteamUser/GetPlayerBans/v1/?key=${Config.Steam.apiKey}&steamids=`;
 
-const REGEX_STEAMURL = /^(http|https):\/\/steamcommunity.com\/profiles\//;
+const REGEX_STEAMURL = /^(http|https):\/\/(www\.)?steamcommunity.com\/profiles\//;
 const REGEX_STEAMID64 = /^[0-9]{17}$/;
-const REGEX_STEAMURL64 = /^(http|https):\/\/steamcommunity.com\/profiles\/[0-9]{17}$/;
-const REGEX_STEAMCUSTOMURL = /^(http|https):\/\/steamcommunity.com\/id\//;
+const REGEX_STEAMURL64 = /^(http|https):\/\/(www\.)?steamcommunity.com\/profiles\/[0-9]{17}$/;
+const REGEX_STEAMCUSTOMURL = /^(http|https):\/\/(www\.)?steamcommunity.com\/id\//;
 
 const Datastore = require('nedb');
 const ProfileDB = new Datastore({ filename: Path.join(__dirname, '/data/db/profiles.db'), autoload: true });
