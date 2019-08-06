@@ -145,11 +145,15 @@ TelegramBot.on('message', (message) => {
                     var steamID64 = steamID.replace(REGEX_STEAMURL, '');
                     addProfile(SteamWebAPIURL + steamID64, chatID);
                 } else if (steamID.match(REGEX_STEAMCUSTOMURL)) {
-                    resolveCustomURL(steamID).then((steamID64) => {
-                        addProfile(SteamWebAPIURL + steamID64, chatID);
-                    }).catch(() => {
-                        sendMessage(`${steamID} ${Messages.errorUnexpected}`, chatID);
-                    });
+                    if (steamID.replace(REGEX_STEAMCUSTOMURL, '').indexOf('/') == -1) {
+                        resolveCustomURL(steamID).then((steamID64) => {
+                            addProfile(SteamWebAPIURL + steamID64, chatID);
+                        }).catch(() => {
+                            sendMessage(`${steamID} ${Messages.errorUnexpected}`, chatID);
+                        });
+                    } else {
+                        sendMessage(`${steamID} ${Messages.profileInvalid}`, chatID);
+                    }
                 } else {
                     sendMessage(`${steamID} ${Messages.profileInvalid}`, chatID);
                 }
@@ -324,7 +328,7 @@ function addUser(chatID, messageID, userID, username) {
         }
         sendMessage(Messages.userRequestAccepted, userID);
         editMessageText(chatID, messageID, Messages.userRequestAcceptedMaster);
-    });   
+    });
 }
 
 function removeUser(chatID, messageID, userID) {
