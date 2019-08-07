@@ -459,43 +459,49 @@ function getBanData() {
             profileIDs.push(profile.SteamID);
         });
 
-        var apiURL = SteamWebAPIURL + profileIDs.reverse().join();
-        Request(apiURL, (err, response, body) => {
-            if (err) console.error(err);
+        var queries = Math.ceil(profileIDs.length / 100);
+        for (let i = 0; i < queries; i++) {
+            var queryIndex = i * 100;
+            var queryProfiles = profileIDs.slice(queryIndex, 100);
 
-            if (response.statusCode === 200) {
-                var apiData = JSON.parse(body);
-                apiData.players.forEach((player) => {
-                    var steamID = player.SteamId;
-                    var profileURL = SteamProfileURL + steamID;
-                    ProfileDB.findOne({ SteamID: steamID }, (err, profile) => {
-                        if (err) console.error(err);
-                        if (profile == null) return;
-
-                        if (player.CommunityBanned && !profile.CommunityBanned) {
-                            updateProfile(steamID, player, 'community');
-                            sendMessage(`${profileURL}\n${Messages.profileCommunityBanned}`, profile.Users);
-                        }
-
-                        if (player.VACBanned && !profile.VACBanned) {
-                            updateProfile(steamID, player, 'vac');
-                            handleDisplayedBan(steamID, profileURL, Messages.profileVACBanned, profile.Users);
-                        } else if (player.VACBanned && player.NumberOfVACBans > profile.NumberOfVACBans) {
-                            updateProfile(steamID, player, 'vac');
-                            handleDisplayedBan(steamID, profileURL, Messages.profileVACBannedAgain, profile.Users);                       
-                        }
-
-                        if (player.NumberOfGameBans > profile.NumberOfGameBans && profile.NumberOfGameBans > 0) {
-                            updateProfile(steamID, player, 'game');
-                            handleDisplayedBan(profileURL, Messages.profileGameBannedAgain, profile.Users);   
-                        } else if (player.NumberOfGameBans > profile.NumberOfGameBans) {
-                            updateProfile(steamID, player, 'game');
-                            handleDisplayedBan(steamID, profileURL, Messages.profileGameBanned, profile.Users);   
-                        }
+            var apiURL = SteamWebAPIURL + queryProfiles.reverse().join();
+            Request(apiURL, (err, response, body) => {
+                if (err) console.error(err);
+    
+                if (response.statusCode === 200) {
+                    var apiData = JSON.parse(body);
+                    apiData.players.forEach((player) => {
+                        var steamID = player.SteamId;
+                        var profileURL = SteamProfileURL + steamID;
+                        ProfileDB.findOne({ SteamID: steamID }, (err, profile) => {
+                            if (err) console.error(err);
+                            if (profile == null) return;
+    
+                            if (player.CommunityBanned && !profile.CommunityBanned) {
+                                updateProfile(steamID, player, 'community');
+                                sendMessage(`${profileURL}\n${Messages.profileCommunityBanned}`, profile.Users);
+                            }
+    
+                            if (player.VACBanned && !profile.VACBanned) {
+                                updateProfile(steamID, player, 'vac');
+                                handleDisplayedBan(steamID, profileURL, Messages.profileVACBanned, profile.Users);
+                            } else if (player.VACBanned && player.NumberOfVACBans > profile.NumberOfVACBans) {
+                                updateProfile(steamID, player, 'vac');
+                                handleDisplayedBan(steamID, profileURL, Messages.profileVACBannedAgain, profile.Users);                       
+                            }
+    
+                            if (player.NumberOfGameBans > profile.NumberOfGameBans && profile.NumberOfGameBans > 0) {
+                                updateProfile(steamID, player, 'game');
+                                handleDisplayedBan(profileURL, Messages.profileGameBannedAgain, profile.Users);   
+                            } else if (player.NumberOfGameBans > profile.NumberOfGameBans) {
+                                updateProfile(steamID, player, 'game');
+                                handleDisplayedBan(steamID, profileURL, Messages.profileGameBanned, profile.Users);   
+                            }
+                        });
                     });
-                });
-            }
-        });
+                }
+            });
+        }
     });
     setTimeout(getBanData, 1000 * 60 * Config.General.checkInterval);
 }
