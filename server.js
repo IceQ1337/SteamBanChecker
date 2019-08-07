@@ -461,8 +461,9 @@ function getBanData() {
 
         var queries = Math.ceil(profileIDs.length / 100);
         for (let i = 0; i < queries; i++) {
-            var queryIndex = i * 100;
-            var queryProfiles = profileIDs.slice(queryIndex, 100);
+            var queryStart = i * 100;
+            var queryEnd = (i + 1) * 100;
+            var queryProfiles = profileIDs.slice(queryStart, queryEnd);
 
             var apiURL = SteamWebAPIURL + queryProfiles.reverse().join();
             Request(apiURL, (err, response, body) => {
