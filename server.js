@@ -493,7 +493,7 @@ function getBanData() {
     
                             if (player.NumberOfGameBans > profile.NumberOfGameBans && profile.NumberOfGameBans > 0) {
                                 updateProfile(steamID, player, 'game');
-                                handleDisplayedBan(profileURL, Messages.profileGameBannedAgain, profile.Users);   
+                                handleDisplayedBan(steamID, profileURL, Messages.profileGameBannedAgain, profile.Users);   
                             } else if (player.NumberOfGameBans > profile.NumberOfGameBans) {
                                 updateProfile(steamID, player, 'game');
                                 handleDisplayedBan(steamID, profileURL, Messages.profileGameBanned, profile.Users);   
