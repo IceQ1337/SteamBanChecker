@@ -9,7 +9,7 @@ const Version = require('./package.json').version;
 
 Request('https://raw.githubusercontent.com/IceQ1337/SteamBanChecker/master/package.json', (err, response, body) => {
     if (err) console.error(err);
-    if (response.statusCode === 200) {
+    if (response.statusCode && response.statusCode === 200) {
         let newVersion = JSON.parse(body).version;
         if (Version != newVersion)
             console.warn(`${Messages.updateAvailable} (${Version} ==> ${newVersion})`);
@@ -344,7 +344,7 @@ function resolveCustomURL(customURL) {
         Request(customURL + '?xml=1', (err, response, body) => {
             if (err) reject(err);
 
-            if (response.statusCode === 200) {
+            if (response.statusCode && response.statusCode === 200) {
                 XML.parseString(body, (err, result) => {
                     if (err) reject(err);
                     resolve(result.profile.steamID64[0]);
@@ -360,7 +360,7 @@ function addProfile(apiURL, chatID) {
     Request(apiURL, (err, response, body) => {
         if (err) console.error(err);
 
-        if (response.statusCode === 200) {
+        if (response.statusCode && response.statusCode === 200) {
             var apiData = JSON.parse(body);
             if (apiData.players.length > 0 && apiData.players[0].SteamId) {
                 var player = apiData.players[0];
@@ -469,7 +469,7 @@ function getBanData() {
             Request(apiURL, (err, response, body) => {
                 if (err) console.error(err);
     
-                if (response.statusCode === 200) {
+                if (response.statusCode && response.statusCode === 200) {
                     var apiData = JSON.parse(body);
                     apiData.players.forEach((player) => {
                         var steamID = player.SteamId;
