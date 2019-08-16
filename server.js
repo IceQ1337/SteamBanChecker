@@ -176,8 +176,8 @@ TelegramBot.on('message', (message) => {
                     });
                 }
     
-                if (msg == '/version' && chatID == Config.Telegram.masterChatID) {
-                    sendMessage(Version);
+                if (msg == '/version') {
+                    sendMessage(Version, chatID);
                 }
             } else {
                 if (msg == '/start') {
