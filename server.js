@@ -127,76 +127,78 @@ TelegramBot.on('message', (message) => {
     var chatID = message.from.id;
     var msg = message.text;
 
-    var userIDs = [];
-    UserDB.find({}, (err, users) => {
-        if (err) console.error(err);
-
-        users.forEach((user) => {
-            userIDs.push(user.chatID);
-        });
-
-        if (chatID == Config.Telegram.masterChatID || userIDs.includes(parseInt(chatID))) {
-            if (msg.startsWith('/add')) {
-                var steamID = msg.replace('/add ', '');
-                if (steamID.endsWith('/')) steamID = steamID.slice(0, -1);
-                if (steamID.match(REGEX_STEAMID64)) {
-                    addProfile(SteamWebAPIURL + steamID, chatID);
-                } else if (steamID.match(REGEX_STEAMURL64)) {
-                    var steamID64 = steamID.replace(REGEX_STEAMURL, '');
-                    addProfile(SteamWebAPIURL + steamID64, chatID);
-                } else if (steamID.match(REGEX_STEAMCUSTOMURL)) {
-                    if (steamID.replace(REGEX_STEAMCUSTOMURL, '').indexOf('/') == -1) {
-                        resolveCustomURL(steamID).then((steamID64) => {
-                            addProfile(SteamWebAPIURL + steamID64, chatID);
-                        }).catch(() => {
-                            sendMessage(`${steamID} ${Messages.errorUnexpected}`, chatID);
-                        });
+    if (msg) {
+        var userIDs = [];
+        UserDB.find({}, (err, users) => {
+            if (err) console.error(err);
+    
+            users.forEach((user) => {
+                userIDs.push(user.chatID);
+            });
+    
+            if (chatID == Config.Telegram.masterChatID || userIDs.includes(parseInt(chatID))) {
+                if (msg.startsWith('/add')) {
+                    var steamID = msg.replace('/add ', '');
+                    if (steamID.endsWith('/')) steamID = steamID.slice(0, -1);
+                    if (steamID.match(REGEX_STEAMID64)) {
+                        addProfile(SteamWebAPIURL + steamID, chatID);
+                    } else if (steamID.match(REGEX_STEAMURL64)) {
+                        var steamID64 = steamID.replace(REGEX_STEAMURL, '');
+                        addProfile(SteamWebAPIURL + steamID64, chatID);
+                    } else if (steamID.match(REGEX_STEAMCUSTOMURL)) {
+                        if (steamID.replace(REGEX_STEAMCUSTOMURL, '').indexOf('/') == -1) {
+                            resolveCustomURL(steamID).then((steamID64) => {
+                                addProfile(SteamWebAPIURL + steamID64, chatID);
+                            }).catch(() => {
+                                sendMessage(`${steamID} ${Messages.errorUnexpected}`, chatID);
+                            });
+                        } else {
+                            sendMessage(`${steamID} ${Messages.profileInvalid}`, chatID);
+                        }
                     } else {
                         sendMessage(`${steamID} ${Messages.profileInvalid}`, chatID);
                     }
-                } else {
-                    sendMessage(`${steamID} ${Messages.profileInvalid}`, chatID);
                 }
-            }
-            
-            if (msg == '/users' && chatID == Config.Telegram.masterChatID) {
-                getUserAmount().then((userAmount) => {
-                    if (userAmount > 0) {
-                        getCurrentUserListMenuPage().then((userListKeyboard) => {
-                            sendMessageKeyboard(Messages.menuUserListTitle, userListKeyboard, chatID);
-                        }).catch((err) => {
-                            sendMessage(err, chatID);
-                        });
-                    } else {
-                        sendMessage(Messages.userEmpty);
-                    }
-                }).catch(() => {
-                    sendMessage(Messages.errorUnexpected);
-                });
-            }
-
-            if (msg == '/version' && chatID == Config.Telegram.masterChatID) {
-                sendMessage(Version);
-            }
-        } else {
-            if (msg == '/start') {
-                sendMessage(Messages.userStartInfo, chatID);
-            } else if (msg == '/request') {
-                if (Config.General.allowRequests) {
-                    var userRequestKeyboard = {
-                        inline_keyboard: [
-                            [
-                                { text: Messages.buttonAccept, callback_data: `user-accept-${chatID}-${username}` },
-                                { text: Messages.buttonDeny, callback_data: `user-deny-${chatID}` }
+                
+                if (msg == '/users' && chatID == Config.Telegram.masterChatID) {
+                    getUserAmount().then((userAmount) => {
+                        if (userAmount > 0) {
+                            getCurrentUserListMenuPage().then((userListKeyboard) => {
+                                sendMessageKeyboard(Messages.menuUserListTitle, userListKeyboard, chatID);
+                            }).catch((err) => {
+                                sendMessage(err, chatID);
+                            });
+                        } else {
+                            sendMessage(Messages.userEmpty);
+                        }
+                    }).catch(() => {
+                        sendMessage(Messages.errorUnexpected);
+                    });
+                }
+    
+                if (msg == '/version' && chatID == Config.Telegram.masterChatID) {
+                    sendMessage(Version);
+                }
+            } else {
+                if (msg == '/start') {
+                    sendMessage(Messages.userStartInfo, chatID);
+                } else if (msg == '/request') {
+                    if (Config.General.allowRequests) {
+                        var userRequestKeyboard = {
+                            inline_keyboard: [
+                                [
+                                    { text: Messages.buttonAccept, callback_data: `user-accept-${chatID}-${username}` },
+                                    { text: Messages.buttonDeny, callback_data: `user-deny-${chatID}` }
+                                ]
                             ]
-                        ]
-                    };
-                    sendMessage(Messages.userRequestSend, chatID);
-                    sendMessageKeyboard(`${username} ${Messages.userRequestSendMaster}`, userRequestKeyboard);
+                        };
+                        sendMessage(Messages.userRequestSend, chatID);
+                        sendMessageKeyboard(`${username} ${Messages.userRequestSendMaster}`, userRequestKeyboard);
+                    }
                 }
             }
-        }
-    });
+        });
+    }
 });
 
 TelegramBot.on('inline.callback.query', (message) => {
