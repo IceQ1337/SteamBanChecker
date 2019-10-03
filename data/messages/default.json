@@ -1,6 +1,7 @@
 {
 	"updateAvailable": "There is a new version of this script available on GitHub!",
 	"errorUnexpected": "An unexpected error occurred. Please try again.",
+	"errorURLResolve": "An error occurred while resolving the Custom-URL.\nMaybe the API-Key was revoked.",
 	"errorUpdatingDB": "An unexpected error occurred while updating the database.",
 	"profileInvalid": "is invalid and was NOT added to the list!",
 	"profileExists": "is already in the list!",

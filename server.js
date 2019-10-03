@@ -150,7 +150,7 @@ TelegramBot.on('message', (message) => {
                             resolveCustomURL(steamID).then((steamID64) => {
                                 addProfile(SteamWebAPIURL + steamID64, chatID);
                             }).catch(() => {
-                                sendMessage(`${steamID} ${Messages.errorUnexpected}`, chatID);
+                                sendMessage(`${steamID} ${Messages.errorURLResolve}`, chatID);
                             });
                         } else {
                             sendMessage(`${steamID} ${Messages.profileInvalid}`, chatID);
