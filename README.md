@@ -6,7 +6,7 @@ A simple Node.js script that periodically checks given steam-profiles for variou
 ## Requirements
 In order to use this bot, you need the following dependencies and tokens:
 
-- Node.js
+- Node.js: https://nodejs.org/en/ - **[Compatibility Warning](https://github.com/IceQ1337/SteamBanChecker/issues/5)**
 - Steam API Key: https://steamcommunity.com/dev/apikey
 - Telegram Bot Token: https://core.telegram.org/bots#6-botfather
 - Telegram Chat ID: [Retrieve your Telegram Chat ID](#retrieve-your-telegram-chat-id)
