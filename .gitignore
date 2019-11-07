@@ -1,5 +1,6 @@
 .vs/
 node_modules/
-config.json
-profiles.db
-users.db
+data/config.json
+data/db/profiles.db
+data/db/users.db
+data/screenshots/*
