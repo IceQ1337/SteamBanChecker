@@ -172,7 +172,7 @@ TelegramBot.on('message', (message) => {
                             sendMessage(Messages.userEmpty);
                         }
                     }).catch(() => {
-                        sendMessage(Messages.errorUnexpected);
+                        sendMessage(Messages.errorUserAmount);
                     });
                 }
     
@@ -249,7 +249,7 @@ function getCurrentUserListMenuPage(pageNumber = 1) {
         UserDB.find({}, (err, users) => {
             if (err) {
                 console.error(err);
-                reject(Messages.errorUnexpected);
+                reject(Messages.errorReadingUserlist);
             }
     
             var firstPageEntry = (pageNumber - 1)  * 6 + 1;
@@ -391,10 +391,10 @@ function addProfile(apiURL, chatID) {
                     }
                 });
             } else {
-                sendMessage(Messages.errorUnexpected, chatID);
+                sendMessage(Messages.errorAPIData, chatID);
             }
         } else {
-            sendMessage(Messages.errorUnexpected, chatID);
+            sendMessage(Messages.errorAPIRequest, chatID);
         }
     });
 }

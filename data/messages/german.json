@@ -1,8 +1,11 @@
 {
 	"updateAvailable": "Es ist eine neue Version dieses Scripts auf GitHub verfügbar!",
-	"errorUnexpected": "Ein unerwarteter Fehler ist aufgetreten. Bitte versuche es erneut.",
 	"errorURLResolve": "Beim Auflösen der Custom-URL ist ein Fehler aufgetreten.\nEventuell wurde der API-Key wiederrufen.",
-	"errorUpdatingDB": "Beim Aktualisieren der Datenbank ist ein unerwarteter Fehler aufgetreten.",
+	"errorUpdatingDB": "Beim Aktualisieren der Datenbank ist ein Fehler aufgetreten.",
+	"errorAPIRequest": "Beim Abfragen der Steam-API ist ein Fehler aufgetreten.",
+	"errorAPIData": "Die Ergebnisse der Steam-API enthalten ungültige Daten.",
+	"errorUserAmount": "Beim Auslesen der Benutzeranzahl ist ein Fehler aufgetreten.",
+	"errorReadingUserlist": "Beim Auslesen der Benutzerliste ist ein Fehler aufgetreten.",
 	"profileInvalid": "ist ungültig und wurde NICHT zur Liste hinzugefügt!",
 	"profileExists": "befindet sich bereits in der Liste!",
 	"profileAdded": "wurde erfolgreich zur Liste hinzugefügt!",
