@@ -186,36 +186,31 @@ TelegramBot.on('message', (message) => {
                 }
 
                 if (msg == '/stats') {
-                    ProfileDB.count({}, (err, profiles) => {
+                    ProfileDB.find({}, (err, profiles) => {
                         if (err) {
                             sendMessage(err, chatID);
                         } else {
-                            ProfileDB.count({ Tracked: false }, (err, profilesBanned) => {
+                            UserDB.count({}, (err, users) => {
                                 if (err) {
                                     sendMessage(err, chatID);
                                 } else {
-                                    UserDB.count({}, (err, users) => {
-                                        if (err) {
-                                            sendMessage(err, chatID);
-                                        } else {
-                                            var botStatistics = replaceMessageString(Messages.botStatistics, { '%TOTAL%': profiles, '%USERS%': users + 1, '%BANNED%': profilesBanned, '%CHECKED%': profiles - profilesBanned, '%PERCENT%': Math.round((profilesBanned / profiles) * 100) });
-                                            ProfileDB.find({ Users: chatID}, (err, profiles) => {
-                                                if (err) {
-                                                    sendMessage(err, chatID);
-                                                    sendMessage(botStatistics, chatID);
-                                                } else {
-                                                    ProfileDB.count({ Users: chatID, Tracked: false}, (err, profilesBannedByUser) => {
-                                                        if (err) {
-                                                            sendMessage(err, chatID);
-                                                        } else {
-                                                            var userStatistics = replaceMessageString(Messages.userStatistics, { '%PROFILES%': profiles.length, '%BANNED%': profilesBannedByUser, '%PERCENT%': Math.round((profilesBannedByUser / profiles.length) * 100) });
-                                                            sendMessage(botStatistics + '\n\n' + userStatistics, chatID);
-                                                        }
-                                                    });
-                                                }
-                                            });
+                                    var profilesBanned = 0;
+                                    var userProfiles = 0;
+                                    var userProfilesBanned = 0;
+                                    profiles.forEach((profile) => {
+                                        if (profile.Tracked == false) profilesBanned++;
+                                        if (profile.Users.includes(chatID)) {
+                                            userProfiles++;
+
+                                            if (profile.Tracked == false) {
+                                                userProfilesBanned++;
+                                            }
                                         }
                                     });
+
+                                    var botStatistics = replaceMessageString(Messages.botStatistics, { '%TOTAL%': profiles.length, '%USERS%': users + 1, '%BANNED%': profilesBanned, '%CHECKED%': profiles.length - profilesBanned, '%PERCENT%': Math.round((profilesBanned / profiles.length) * 100) });
+                                    var userStatistics = replaceMessageString(Messages.userStatistics, { '%PROFILES%': userProfiles, '%BANNED%': userProfilesBanned, '%PERCENT%': Math.round((userProfilesBanned / userProfiles) * 100) });
+                                    sendMessage(botStatistics + '\n\n' + userStatistics, chatID);
                                 }
                             });
                         }
