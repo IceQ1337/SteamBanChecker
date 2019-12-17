@@ -81,6 +81,9 @@ Accepted users can `/add` their own profiles. You will not be notified about thi
 
 All data is stored in a readable database files called `profiles.db` and `users.db`
 
+### View Statistics
+Type `/stats` to get global and personal statistics (total users, banned users and percentage).
+
 ### Taking Profile Screenshots ( NON-FUNCTIONAL AT THE MOMENT )
 **This only applies to displayed bans like VAC and Game Bans.**  
 - If `takeScreenshot` is enabled, a profile screenshot will be taken after ban detection.
