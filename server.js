@@ -120,6 +120,17 @@ function editMessageText(chatID, messageID, messageText, inlineKeyboard = { inli
     });  
 }
 
+function replaceMessageString(message, data) {
+    var output = message.replace(/%[^%]+%/g, (match) => {
+        if (match in data) {
+            return(data[match]);
+        } else {
+            return("");
+        }
+    });
+    return(output);
+}
+
 TelegramBot.on('message', (message) => {
     var username = (message.from.username ? `@${message.from.username}` : message.from.first_name);
     var chatID = message.from.id;
@@ -171,6 +182,43 @@ TelegramBot.on('message', (message) => {
                         }
                     }).catch(() => {
                         sendMessage(Messages.errorUserAmount);
+                    });
+                }
+
+                if (msg == '/stats') {
+                    ProfileDB.count({}, (err, profiles) => {
+                        if (err) {
+                            sendMessage(err, chatID);
+                        } else {
+                            ProfileDB.count({ Tracked: false }, (err, profilesBanned) => {
+                                if (err) {
+                                    sendMessage(err, chatID);
+                                } else {
+                                    UserDB.count({}, (err, users) => {
+                                        if (err) {
+                                            sendMessage(err, chatID);
+                                        } else {
+                                            var botStatistics = replaceMessageString(Messages.botStatistics, { '%TOTAL%': profiles, '%USERS%': users + 1, '%BANNED%': profilesBanned, '%CHECKED%': profiles - profilesBanned, '%PERCENT%': Math.round((profilesBanned / profiles) * 100) });
+                                            ProfileDB.find({ Users: chatID}, (err, profiles) => {
+                                                if (err) {
+                                                    sendMessage(err, chatID);
+                                                    sendMessage(botStatistics, chatID);
+                                                } else {
+                                                    ProfileDB.count({ Users: chatID, Tracked: false}, (err, profilesBannedByUser) => {
+                                                        if (err) {
+                                                            sendMessage(err, chatID);
+                                                        } else {
+                                                            var userStatistics = replaceMessageString(Messages.userStatistics, { '%PROFILES%': profiles.length, '%BANNED%': profilesBannedByUser, '%PERCENT%': Math.round((profilesBannedByUser / profiles.length) * 100) });
+                                                            sendMessage(botStatistics + '\n\n' + userStatistics, chatID);
+                                                        }
+                                                    });
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
+                            });
+                        }
                     });
                 }
     

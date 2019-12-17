@@ -31,5 +31,7 @@
 	"buttonRemove": "Entfernen",
 	"menuActionChoose": "Wähle eine der folgenden Optionen:",
 	"menuActionCanceled": "Die Aktion wurde abgebrochen.",
-	"menuUserListTitle": "Aktuelle Benutzerliste:"
+	"menuUserListTitle": "Aktuelle Benutzerliste:",
+	"botStatistics": "Die Datenbank beinhaltet insgesamt %TOTAL% von %USERS% User(n) hinzugefügte Profil(e). %BANNED% davon sind bereits gebannt und %CHECKED% werden noch geprüft, was bedeutet, dass insgesamt %PERCENT%% aller Profile gebannt sind.",
+	"userStatistics": "Du hast %PROFILES% Profil(e) hinzugefügt und %BANNED% (%PERCENT%%) davon sind gebannt."
 }

@@ -31,5 +31,7 @@
 	"buttonRemove": "Remove",
 	"menuActionChoose": "Choose one of the following actions.",
 	"menuActionCanceled": "The action has been canceled.",
-	"menuUserListTitle": "Current Userlist:"
+	"menuUserListTitle": "Current Userlist:",
+	"botStatistics": "The database contains a total of %TOTAL% profile(s) added by %USERS% user(s). %BANNED% of them are banned and %CHECKED% are still being checked which means a total of %PERCENT%% of all profiles are banned.",
+	"userStatistics": "You have added %PROFILES% and %BANNED% (%PERCENT%%) of them are banned."
 }
