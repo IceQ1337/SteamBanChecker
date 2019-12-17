@@ -6,7 +6,7 @@ A simple Node.js script that periodically checks given steam-profiles for variou
 ## Requirements
 In order to use this bot, you need the following dependencies and tokens:
 
-- Node.js: https://nodejs.org/en/ - **[Compatibility Warning](https://github.com/IceQ1337/SteamBanChecker/issues/5)**
+- Node.js: https://nodejs.org/en/
 - Steam API Key: https://steamcommunity.com/dev/apikey
 - Telegram Bot Token: https://core.telegram.org/bots#6-botfather
 - Telegram Chat ID: [Retrieve your Telegram Chat ID](#retrieve-your-telegram-chat-id)
@@ -45,9 +45,9 @@ In most cases, files only have to be moved or renamed.
 		"masterChatID": "Telegram Chat ID" // Your Telegram Chat ID
 	},
 	"Screenshot": {
-		"takeScreenshot": false, // Take Profile-Screenshots (Explanation Below)
-		"sendScreenshot": true,
-		"saveScreenshot": true
+		"takeScreenshot": false, // NON-FUNCTIONAL
+		"sendScreenshot": true, // NON-FUNCTIONAL
+		"saveScreenshot": true // NON-FUNCTIONAL
 	}
 }
 ```
@@ -81,7 +81,7 @@ Accepted users can `/add` their own profiles. You will not be notified about thi
 
 All data is stored in a readable database files called `profiles.db` and `users.db`
 
-### Taking Profile Screenshots
+### Taking Profile Screenshots ( NON-FUNCTIONAL AT THE MOMENT )
 **This only applies to displayed bans like VAC and Game Bans.**  
 - If `takeScreenshot` is enabled, a profile screenshot will be taken after ban detection.
 - If both `sendScreenshot` and `saveScreenshot` are disabled, no screenshot will be taken.
@@ -113,10 +113,10 @@ In order to contribute to the project, please follow the **GitHub Standard Fork 
 - Submit a **Pull Request** so I can review your changes
 
 ## Used Node.js Modules
-- [NeDB](https://github.com/louischatriot/nedb)
 - [Request](https://github.com/request/request)
-- [Node.js Telegram Bot API](https://github.com/mast/telegram-bot-api)
 - [XML2JS](https://github.com/Leonidas-from-XIV/node-xml2js)
+- [NeDB](https://github.com/louischatriot/nedb)
+- [Node.js Telegram Bot API](https://github.com/mast/telegram-bot-api)
 
 ## Donating
 If you find this script useful, you can support me by donating items via steam.  
