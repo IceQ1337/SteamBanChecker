@@ -1,8 +1,8 @@
 const Path = require('path');
 const Request = require('request');
 const XML = require('xml2js');
-const Webshot = require('webshot');
-const FS = require('fs');
+const Datastore = require('nedb');
+const Telegram = require('telegram-bot-api');
 const Config = require(Path.join(__dirname, '/data/config.json'));
 const Messages = require(Path.join(__dirname, `/data/messages/${Config.General.messages}.json`));
 const Version = require('./package.json').version;
@@ -34,7 +34,6 @@ const REGEX_STEAMID64 = /^[0-9]{17}$/;
 const REGEX_STEAMURL64 = /^(http|https):\/\/(www\.)?steamcommunity.com\/profiles\/[0-9]{17}$/;
 const REGEX_STEAMCUSTOMURL = /^(http|https):\/\/(www\.)?steamcommunity.com\/id\//;
 
-const Datastore = require('nedb');
 const ProfileDB = new Datastore({ filename: Path.join(__dirname, '/data/db/profiles.db'), autoload: true });
 const UserDB = new Datastore({ filename: Path.join(__dirname, '/data/db/users.db'), autoload: true });
 
@@ -46,7 +45,6 @@ UserDB.ensureIndex({ fieldName: 'chatID', unique: true }, (err) => {
     if (err) console.error(err);
 });
 
-const Telegram = require('telegram-bot-api');
 const TelegramBot = new Telegram({ token: Config.Telegram.botToken, updates: { enabled: true } });
 
 function sendMessage(messageText, chatID = Config.Telegram.masterChatID) {
@@ -421,35 +419,9 @@ function updateProfile(steamID, player, type) {
     }
 }
 
-function takeScreenshot(url, path) {
-    return new Promise((resolve, reject) => {
-        var options = { screenSize: {width: 1024, height: 768}, shotSize: {width: 'window', height: 'window'}};
-        Webshot(url, path, options, (err) => {
-            if (err) reject(err);
-            resolve();
-        });;
-    });
-}
-
 function handleDisplayedBan(steamID, profileURL, banMessage, users) {
-    if (Config.Screenshot.takeScreenshot && (Config.Screenshot.sendScreenshot || Config.Screenshot.saveScreenshot)) {
-        var screenshotPath = `data/screenshots/${steamID}.png`;
-        takeScreenshot(profileURL, screenshotPath).then(() => {
-            if (Config.Screenshot.sendScreenshot) {
-                sendPhoto(`${profileURL}\n${banMessage}`, screenshotPath, users).then(() => {
-                    if (!Config.Screenshot.saveScreenshot) FS.unlinkSync(screenshotPath);
-                }).catch((err) => {
-                    console.error(err);
-                });
-            } else {
-                sendMessage(`${profileURL}\n${banMessage}`, users);
-            }
-        }).catch((err) => {
-            sendMessage(err, chatID);
-        }); 
-    } else {
-        sendMessage(`${profileURL}\n${banMessage}`, users);
-    }
+    //if (Config.Screenshot.takeScreenshot && (Config.Screenshot.sendScreenshot || Config.Screenshot.saveScreenshot)) {}
+    sendMessage(`${profileURL}\n${banMessage}`, users);
 }
 
 function getBanData() {
