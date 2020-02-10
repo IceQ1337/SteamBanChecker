@@ -43,11 +43,6 @@ In most cases, files only have to be moved or renamed.
 	"Telegram": {
 		"botToken": "Telegram Bot Token", // Your Telegram Bot Token
 		"masterChatID": "Telegram Chat ID" // Your Telegram Chat ID
-	},
-	"Screenshot": {
-		"takeScreenshot": false, // NON-FUNCTIONAL
-		"sendScreenshot": true, // NON-FUNCTIONAL
-		"saveScreenshot": true // NON-FUNCTIONAL
 	}
 }
 ```
@@ -83,13 +78,6 @@ All data is stored in a readable database files called `profiles.db` and `users.
 
 ### View Statistics
 Type `/stats` to get global and personal statistics (total users, banned users and percentage).
-
-### Taking Profile Screenshots ( NON-FUNCTIONAL AT THE MOMENT )
-**This only applies to displayed bans like VAC and Game Bans.**  
-- If `takeScreenshot` is enabled, a profile screenshot will be taken after ban detection.
-- If both `sendScreenshot` and `saveScreenshot` are disabled, no screenshot will be taken.
-- If `sendScreenshot` is enabled, the screenshot will be sent via Telegram Bot.
-- If `saveScreenshot` is enabled, the screenshot will be saved, otherwise it gets deleted.
 
 ## Retrieve your Telegram Chat ID
 In order to retrieve your unique Telegram Chat ID, do as follows:
