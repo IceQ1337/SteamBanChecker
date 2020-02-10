@@ -462,11 +462,6 @@ function updateProfile(steamID, player, type) {
     }
 }
 
-function handleDisplayedBan(steamID, profileURL, banMessage, users) {
-    //if (Config.Screenshot.takeScreenshot && (Config.Screenshot.sendScreenshot || Config.Screenshot.saveScreenshot)) {}
-    sendMessage(`${profileURL}\n${banMessage}`, users);
-}
-
 function getBanData() {
     ProfileDB.find({ Tracked: true }, (err, profiles) => {
         if (err) console.error(err);
@@ -502,18 +497,18 @@ function getBanData() {
     
                             if (player.VACBanned && !profile.VACBanned) {
                                 updateProfile(steamID, player, 'vac');
-                                handleDisplayedBan(steamID, profileURL, Messages.profileVACBanned, profile.Users);
+								sendMessage(`${profileURL}\n${Messages.profileVACBanned}`, profile.Users);
                             } else if (player.VACBanned && player.NumberOfVACBans > profile.NumberOfVACBans) {
                                 updateProfile(steamID, player, 'vac');
-                                handleDisplayedBan(steamID, profileURL, Messages.profileVACBannedAgain, profile.Users);                       
+								sendMessage(`${profileURL}\n${Messages.profileVACBannedAgain}`, profile.Users);								
                             }
     
                             if (player.NumberOfGameBans > profile.NumberOfGameBans && profile.NumberOfGameBans > 0) {
                                 updateProfile(steamID, player, 'game');
-                                handleDisplayedBan(steamID, profileURL, Messages.profileGameBannedAgain, profile.Users);   
+								sendMessage(`${profileURL}\n${Messages.profileGameBannedAgain}`, profile.Users);
                             } else if (player.NumberOfGameBans > profile.NumberOfGameBans) {
                                 updateProfile(steamID, player, 'game');
-                                handleDisplayedBan(steamID, profileURL, Messages.profileGameBanned, profile.Users);   
+								sendMessage(`${profileURL}\n${Messages.profileGameBanned}`, profile.Users);
                             }
                         });
                     });

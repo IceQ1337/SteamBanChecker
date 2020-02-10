@@ -10,10 +10,5 @@
 	"Telegram": {
 		"botToken": "Telegram Bot Token",
 		"masterChatID": "Telegram Chat ID"
-	},
-	"Screenshot": {
-		"takeScreenshot": false,
-		"sendScreenshot": true,
-		"saveScreenshot": true
 	}
 }
