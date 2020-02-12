@@ -23,7 +23,7 @@
   "homepage": "https://github.com/IceQ1337/SteamBanChecker#readme",
   "dependencies": {
     "nedb": "^1.8.0",
-    "request": "^2.88.0",
+    "request": "^2.88.2",
     "telegram-bot-api": "^1.3.3",
     "xml2js": "^0.4.23"
   }
