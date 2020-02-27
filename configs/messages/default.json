@@ -23,6 +23,8 @@
 	"userRequestDeniedMaster": "The request has been denied!",
 	"userRequestRevoked": "Your access has just been revoked!",
 	"userRequestRevokedMaster": "The user has been removed successfully.",
+	"userRequestDisabled": "This feature is currently disabled.",
+	"userRequestMaster": "You are the Master...",
 	"userExists": "This user already has access!",
 	"userEmpty": "Nobody else is currently using this bot.",
 	"buttonAccept": "Accept",
@@ -33,5 +35,7 @@
 	"menuActionCanceled": "The action has been canceled.",
 	"menuUserListTitle": "Current Userlist:",
 	"botStatistics": "The database contains a total of %TOTAL% profile(s) added by %USERS% user(s). %BANNED% of them are banned and %CHECKED% are still being checked which means a total of %PERCENT%% of all profiles are banned.",
-	"userStatistics": "You have added %PROFILES% profile(s) and %BANNED% (%PERCENT%%) of them are banned."
+	"userStatistics": "You have added %PROFILES% profile(s) and %BANNED% (%PERCENT%%) of them are banned.",
+	"noStatistics": "The database does not contain any profiles.",
+	"isPrivateCommand": "This command can only be used in private chats."
 }

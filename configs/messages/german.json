@@ -23,6 +23,8 @@
 	"userRequestDeniedMaster": "Die Anfrage wurde abgelehnt!",
 	"userRequestRevoked": "Dir wurde soeben der Zugriff entzogen!",
 	"userRequestRevokedMaster": "Der Nutzer wurde erfolgreich entfernt.",
+	"userRequestDisabled": "Dieses Feature ist zur Zeit deaktiviert.",
+	"userRequestMaster": "Du kannst dir selbst keine Anfragen senden!",
 	"userExists": "Dieser Nutzer hat bereits Zugriff!",
 	"userEmpty": "Zur Zeit nutzt niemand anderes diesen Bot.",
 	"buttonAccept": "Akzeptieren",
@@ -33,5 +35,7 @@
 	"menuActionCanceled": "Die Aktion wurde abgebrochen.",
 	"menuUserListTitle": "Aktuelle Benutzerliste:",
 	"botStatistics": "Die Datenbank beinhaltet insgesamt %TOTAL% von %USERS% User(n) hinzugefügte Profil(e). %BANNED% davon sind bereits gebannt und %CHECKED% werden noch geprüft, was bedeutet, dass insgesamt %PERCENT%% aller Profile gebannt sind.",
-	"userStatistics": "Du hast %PROFILES% Profil(e) hinzugefügt und %BANNED% (%PERCENT%%) davon sind gebannt."
+	"userStatistics": "Du hast %PROFILES% Profil(e) hinzugefügt und %BANNED% (%PERCENT%%) davon sind gebannt.",
+	"noStatistics": "Die Datenbank enthält keine Profile.",
+	"isPrivateCommand": "Dieser Befehl kann nur in privaten Chats verwendet werden."
 }
