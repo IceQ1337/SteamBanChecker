@@ -129,6 +129,18 @@ module.exports = function(Config, Messages) {
         });       
     };
 
+    this.generateUserRequestKeyboard = (chatID, userName) => {
+        const userRequestKeyboard = {
+            inline_keyboard: [
+                [
+                    { text: Messages.buttonAccept, callback_data: `user-accept-${chatID}-${userName}` },
+                    { text: Messages.buttonDeny, callback_data: `user-deny-${chatID}` }
+                ]
+            ]
+        };
+        return userRequestKeyboard;
+    };
+
     this.generateUserListKeyboard = (users, pageNumber = 1) => {
         return new Promise((resolve, reject) => {
             const firstPageEntry = (pageNumber - 1)  * 6 + 1;

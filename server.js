@@ -175,12 +175,8 @@ Telegram.eventEmitter.on('command_request', (userID, chatID, userName) => {
                     if (userIDs.includes(parseInt(chatID))) {
                         Telegram.sendMessage(Messages.userRequestAccepted, chatID);
                     } else {
-                        Telegram.generateUserRequestKeyboard(chatID, userName).then((userRequestKeyboard) => {
-                            Telegram.sendMessage(Messages.userRequestSend, chatID);
-                            Telegram.sendMessageKeyboard(`${userName} ${Messages.userRequestSendMaster}`, userRequestKeyboard);
-                        }).catch((err) => {
-                            Utility.log('ERROR', 'Telegram', 'generateUserRequestKeyboard', err);
-                        });
+                        Telegram.sendMessage(Messages.userRequestSend, chatID);
+                        Telegram.sendMessageKeyboard(`${userName} ${Messages.userRequestSendMaster}`, Telegram.generateUserRequestKeyboard(chatID, userName));
                     }
                 }).catch((err) => {
                     Utility.log('ERROR', 'Database', 'getUsers', err);
