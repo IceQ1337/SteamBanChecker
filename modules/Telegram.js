@@ -142,55 +142,53 @@ module.exports = function(Config, Messages) {
     };
 
     this.generateUserListKeyboard = (users, pageNumber = 1) => {
-        return new Promise((resolve, reject) => {
-            const firstPageEntry = (pageNumber - 1)  * 6 + 1;
-            const lastPageEntry = pageNumber * 6;
+        const firstPageEntry = (pageNumber - 1)  * 6 + 1;
+        const lastPageEntry = pageNumber * 6;
 
-            const userListMenu = [];
-            const userList = [];
+        const userListMenu = [];
+        const userList = [];
 
-            var current = 0;
-            users.forEach((user, userIndex) => {
-                if ((userIndex + 1) >= firstPageEntry && (userIndex + 1) <= lastPageEntry) {
-                    var listUpdated = false;
-                    userList.push({ text: user.Username, callback_data: `user-list-menu-user-${user.chatID}` });
-                    if (++current >= 3) {
-                        userListMenu.push(userList);
-                        listUpdated = true;
-                        userList.length = 0;
-                        current = 0;
-                    }
+        var current = 0;
+        users.forEach((user, userIndex) => {
+            if ((userIndex + 1) >= firstPageEntry && (userIndex + 1) <= lastPageEntry) {
+                var listUpdated = false;
+                userList.push({ text: user.Username, callback_data: `user-list-menu-user-${user.chatID}` });
+                if (++current >= 3) {
+                    userListMenu.push(userList);
+                    listUpdated = true;
+                    userList.length = 0;
+                    current = 0;
+                }
 
-                    if (userIndex == (users.length - 1) && !listUpdated) {
-                        userListMenu.push(userList);
-                    }
-                }              
-            });
-
-            const prevPage = pageNumber - 1;
-            const nextPage = pageNumber + 1;
-            const totalPages = Math.ceil(users.length / 6);
-
-            const menuPaging = [];
-            if (pageNumber == 1) {
-                menuPaging.push({ text: Messages.buttonCancel, callback_data: 'user-list-menu-cancel' });
-                if (totalPages > 1) menuPaging.push({ text: '>>', callback_data: `user-list-menu-next-${nextPage}` });
-            } else if (pageNumber == totalPages) {
-                menuPaging.push({ text: '<<', callback_data: `user-list-menu-prev-${prevPage}` });
-                menuPaging.push({ text: Messages.buttonCancel, callback_data: 'user-list-menu-cancel' });
-            } else {
-                menuPaging.push({ text: '<<', callback_data: `user-list-menu-prev-${prevPage}` });
-                menuPaging.push({ text: Messages.buttonCancel, callback_data: 'user-list-menu-cancel' });
-                menuPaging.push({ text: '>>', callback_data: `user-list-menu-next-${nextPage}` });
-            }
-
-            userListMenu.push(menuPaging);    
-            const userListKeyboard = {
-                inline_keyboard: userListMenu
-            };
-
-            resolve(userListKeyboard);
+                if (userIndex == (users.length - 1) && !listUpdated) {
+                    userListMenu.push(userList);
+                }
+            }              
         });
+
+        const prevPage = pageNumber - 1;
+        const nextPage = pageNumber + 1;
+        const totalPages = Math.ceil(users.length / 6);
+
+        const menuPaging = [];
+        if (pageNumber == 1) {
+            menuPaging.push({ text: Messages.buttonCancel, callback_data: 'user-list-menu-cancel' });
+            if (totalPages > 1) menuPaging.push({ text: '>>', callback_data: `user-list-menu-next-${nextPage}` });
+        } else if (pageNumber == totalPages) {
+            menuPaging.push({ text: '<<', callback_data: `user-list-menu-prev-${prevPage}` });
+            menuPaging.push({ text: Messages.buttonCancel, callback_data: 'user-list-menu-cancel' });
+        } else {
+            menuPaging.push({ text: '<<', callback_data: `user-list-menu-prev-${prevPage}` });
+            menuPaging.push({ text: Messages.buttonCancel, callback_data: 'user-list-menu-cancel' });
+            menuPaging.push({ text: '>>', callback_data: `user-list-menu-next-${nextPage}` });
+        }
+
+        userListMenu.push(menuPaging);    
+        const userListKeyboard = {
+            inline_keyboard: userListMenu
+        };
+
+        return userListKeyboard;
     };
 
     this.openUserActionMenu = (messageText, messageID, chatID, userID) => {

@@ -232,11 +232,7 @@ Telegram.eventEmitter.on('callback', (messageText, messageID, chatID, callbackDa
     } else if (callbackData.startsWith('user-list-menu-prev-')) {
         const pageNumber = parseInt(callbackData.replace('user-list-menu-prev-', ''));
         Database.getUsers().then((users) => {
-            Telegram.generateUserListKeyboard(users, pageNumber).then((userListKeyboard) => {
-                Telegram.editMessageText(messageText, messageID, chatID, userListKeyboard);
-            }).catch((err) => {
-                Utility.log('ERROR', 'Telegram', 'generateUserListKeyboard', err);
-            });
+            Telegram.editMessageText(messageText, messageID, chatID, Telegram.generateUserListKeyboard(users, pageNumber));
         }).catch((err) => {
             Utility.log('ERROR', 'Database', 'getUsers', err);
         });
