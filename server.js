@@ -60,18 +60,18 @@ SteamAPI.on('ban', (type, player, users) => {
     const profileURL = SteamAPI.profileURL + player.SteamId;
 
     if (typeCommunity) {
-        Telegram.sendMessage(`${profileURL}\n${Messages.profileCommunityBanned}`, users);
+        Telegram.sendMessage(Utility.replaceMessageString(Messages.profileCommunityBanned, { '%PROFILEURL%': profileURL }), users);
     } else {
         var message = -1;
         switch(type) {
             case 'vac':
-                message = Messages.profileVACBanned;
+                message = Utility.replaceMessageString(Messages.profileVACBanned, { '%PROFILEURL%': profileURL });
             case 'vac_multiple':
-                message = Messages.profileVACBannedAgain;
+                message = Utility.replaceMessageString(Messages.profileVACBannedAgain, { '%PROFILEURL%': profileURL });
             case 'game_multiple':
-                message = Messages.profileGameBannedAgain;
+                message = Utility.replaceMessageString(Messages.profileGameBannedAgain, { '%PROFILEURL%': profileURL });
             case 'game':
-                message = Messages.profileGameBanned;
+                message = Utility.replaceMessageString(Messages.profileGameBanned, { '%PROFILEURL%': profileURL });
             default:
                 break;
         }
@@ -79,23 +79,23 @@ SteamAPI.on('ban', (type, player, users) => {
         if (Config.Screenshot.saveScreenshot) {
             Screenshot.saveProfile(profileURL, player.SteamId).then((imagePath) => {
                 if (Config.Screenshot.sendScreenshot) {
-                    Telegram.sendPhoto(`${profileURL}\n${message}`, imagePath, users);
+                    Telegram.sendPhoto(message, imagePath, users);
                 } else {
-                    Telegram.sendMessage(`${profileURL}\n${message}`, users);
+                    Telegram.sendMessage(message, users);
                 }
             }).catch((err) => {
                 Utility.log('ERROR', 'Screenshot', 'saveProfile', err);
-                Telegram.sendMessage(`${profileURL}\n${message}`, users);
+                Telegram.sendMessage(message, users);
             });
         } else {
-            Telegram.sendMessage(`${profileURL}\n${message}`, users);
+            Telegram.sendMessage(message, users);
         }
     }
 });
 
 SteamAPI.on('playerdata', (playerData, chatID) => {
     Database.addProfile(chatID, playerData).then(() => {
-        Telegram.sendMessage(`${playerData.SteamID} ${Messages.profileAdded}`, chatID);
+        Telegram.sendMessage(Utility.replaceMessageString(Messages.profileAdded, { '%PROFILE%': playerData.SteamID }), chatID);
     }).catch((err) => {
         Utility.log('ERROR', 'Database', 'addProfile', err);
     });
@@ -123,7 +123,7 @@ Telegram.eventEmitter.on('command_add', (userID, chatID, argument) => {
                 if (validSteamID) {
                     Database.getProfile(validSteamID).then((profile) => {
                         if (profile && profile.Users.includes(chatID)) {
-                            Telegram.sendMessage(`${validSteamID} ${Messages.profileExists}`, chatID);
+                            Telegram.sendMessage(Utility.replaceMessageString(Messages.profileExists, { '%PROFILE%': validSteamID }), chatID);
                         } else {
                             SteamAPI.queryProfile(validSteamID, chatID);
                         }
@@ -174,7 +174,7 @@ Telegram.eventEmitter.on('command_request', (userID, chatID, userName) => {
                         Telegram.sendMessage(Messages.userRequestAccepted, chatID);
                     } else {
                         Telegram.sendMessage(Messages.userRequestSend, chatID);
-                        Telegram.sendMessageKeyboard(`${userName} ${Messages.userRequestSendMaster}`, Telegram.generateUserRequestKeyboard(chatID, userName));
+                        Telegram.sendMessageKeyboard(Utility.replaceMessageString(Messages.userRequestSendMaster, { '%USER%': userName }), Telegram.generateUserRequestKeyboard(chatID, userName));
                     }
                 }).catch((err) => {
                     Utility.log('ERROR', 'Database', 'getUsers', err);
