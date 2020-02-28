@@ -146,11 +146,7 @@ Telegram.eventEmitter.on('command_users', (userID, chatID) => {
     if (userID == chatID) {
         Database.getUsers().then((users) => {
             if (users.length > 0) {
-                Telegram.generateUserListKeyboard(users).then((userListKeyboard) => {
-                    Telegram.sendMessageKeyboard(Messages.menuUserListTitle, userListKeyboard, chatID);
-                }).catch((err) => {
-                    Utility.log('ERROR', 'Telegram', 'generateUserListKeyboard', err);
-                });
+                Telegram.sendMessageKeyboard(Messages.menuUserListTitle, Telegram.generateUserListKeyboard(users));
             } else {
                 Telegram.sendMessage(Messages.userEmpty, chatID);
             }
@@ -220,15 +216,18 @@ Telegram.eventEmitter.on('command_stats', (userID, chatID) => {
 Telegram.eventEmitter.on('callback', (messageText, messageID, chatID, callbackData) => {
     if (callbackData.startsWith('user-accept')) {
         const userData = callbackData.split('-');
-        Database.addUser(parseInt(userData[2]), userData[3]).then(() => {
-            Telegram.sendMessage(Messages.userRequestAccepted, userData[2]);
+        const userID = parseInt(userData[2]);
+        const userName = userData[3];
+        Database.addUser(userID, userName).then(() => {
+            Telegram.sendMessage(Messages.userRequestAccepted, userID);
             Telegram.editMessageText(Messages.userRequestAcceptedMaster, messageID, chatID);
         }).catch((err) => {
             Utility.log('ERROR', 'Database', 'addUser', err);
         });
     } else if (callbackData.startsWith('user-deny')) {
+        const userID = parseInt(callbackData.replace('user-deny-', ''));
         Telegram.editMessageText(Messages.userRequestDeniedMaster, messageID, chatID);
-        Telegram.sendMessage(Messages.userRequestDenied, parseInt(callbackData.replace('user-deny-', '')));
+        Telegram.sendMessage(Messages.userRequestDenied, userID);
     } else if (callbackData.startsWith('user-list-menu-prev-')) {
         const pageNumber = parseInt(callbackData.replace('user-list-menu-prev-', ''));
         Database.getUsers().then((users) => {
@@ -239,11 +238,7 @@ Telegram.eventEmitter.on('callback', (messageText, messageID, chatID, callbackDa
     } else if (callbackData.startsWith('user-list-menu-next-')) {
         const pageNumber = parseInt(callbackData.replace('user-list-menu-next-', ''));
         Database.getUsers().then((users) => {
-            Telegram.generateUserListKeyboard(users, pageNumber).then((userListKeyboard) => {
-                Telegram.editMessageText(messageText, messageID, chatID, userListKeyboard);
-            }).catch((err) => {
-                Utility.log('ERROR', 'Telegram', 'generateUserListKeyboard', err);
-            });
+            Telegram.editMessageText(messageText, messageID, chatID, Telegram.generateUserListKeyboard(users, pageNumber));
         }).catch((err) => {
             Utility.log('ERROR', 'Database', 'getUsers', err);
         });

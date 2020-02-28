@@ -20,9 +20,9 @@ module.exports = function() {
     this.db = { profiles: ProfileDB, users: UserDB };
     this.eventEmitter = new Events.EventEmitter();
 
-    this.addUser = (userID, username) => {
+    this.addUser = (userID, userName) => {
         return new Promise((resolve, reject) => {
-            this.db.users.insert({ chatID: userID, username: username }, (err) => {
+            this.db.users.insert({ chatID: userID, username: userName }, (err) => {
                 if (err) {
                     reject(err);
                 }
