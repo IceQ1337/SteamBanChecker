@@ -143,8 +143,8 @@ Telegram.eventEmitter.on('command_add', (userID, chatID, argument) => {
 });
 
 Telegram.eventEmitter.on('command_users', (userID, chatID) => {
-    if (userID == chatID) {
-        if (Telegram.isMaster(userID)) {
+    if (Telegram.isMaster(userID)) {
+        if (userID == chatID) {
             Database.getUsers().then((users) => {
                 if (users.length > 0) {
                     Telegram.sendMessageKeyboard(Messages.menuUserListTitle, Telegram.generateUserListKeyboard(users));
@@ -154,9 +154,9 @@ Telegram.eventEmitter.on('command_users', (userID, chatID) => {
             }).catch((err) => {
                 Utility.log('ERROR', 'Database', 'getUsers', err);
             });
+        } else {
+            Telegram.sendMessage(Messages.isPrivateCommand, chatID);
         }
-    } else {
-        Telegram.sendMessage(Messages.isPrivateCommand, chatID);
     }
 });
 
