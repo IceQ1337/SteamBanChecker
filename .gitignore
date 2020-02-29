@@ -1,5 +1,5 @@
 .vs/
 node_modules/
 datastore/*.db
-datastore/screenshots/*
+datastore/screenshots/*.png
 configs/config.json
