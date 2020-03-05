@@ -46,8 +46,8 @@ module.exports = function() {
     this.isValidSteamID = (argument) => {
         const _this = this;
         return new Promise((resolve, reject) => {
-            const profileURL = /^((http|https):\/\/(www\.)?steamcommunity.com\/profiles\/([0-9]{17}))|([0-9]{17})$/;
-            const customURL = /^(http|https):\/\/(www\.)?steamcommunity.com\/id\//;
+            const profileURL = /^(((http|https):\/\/(www\.)?)?steamcommunity.com\/profiles\/([0-9]{17}))|([0-9]{17})$/;
+            const customURL = /^((http|https):\/\/(www\.)?)?steamcommunity.com\/id\//;
 
             if (argument.match(profileURL)) {
                 var steamID = argument.match(/[0-9]{17}/gi)[0];
