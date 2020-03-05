@@ -78,7 +78,7 @@ SteamAPI.on('ban', (type, player, users) => {
 
         if (Config.Screenshot.saveScreenshot) {
             Screenshot.saveProfile(profileURL, player.SteamId).then((imagePath) => {
-                if (Config.Screenshot.sendScreenshot) {
+                if (imagePath && Config.Screenshot.sendScreenshot) {
                     Telegram.sendPhoto(message, imagePath, users);
                 } else {
                     Telegram.sendMessage(message, users);
