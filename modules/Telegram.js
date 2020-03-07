@@ -142,11 +142,11 @@ module.exports = function(Config, Messages) {
     };
 
     this.generateUserListKeyboard = (users, pageNumber = 1) => {
-        const firstPageEntry = (pageNumber - 1)  * 6 + 1;
+        const firstPageEntry = (pageNumber - 1) * 6 + 1;
         const lastPageEntry = pageNumber * 6;
 
         const userListMenu = [];
-        const userList = [];
+        var userList = [];
 
         var current = 0;
         users.forEach((user, userIndex) => {
@@ -156,7 +156,7 @@ module.exports = function(Config, Messages) {
                 if (++current >= 3) {
                     userListMenu.push(userList);
                     listUpdated = true;
-                    userList.length = 0;
+                    userList = [];
                     current = 0;
                 }
 
@@ -173,7 +173,9 @@ module.exports = function(Config, Messages) {
         const menuPaging = [];
         if (pageNumber == 1) {
             menuPaging.push({ text: Messages.buttonCancel, callback_data: 'user-list-menu-cancel' });
-            if (totalPages > 1) menuPaging.push({ text: '>>', callback_data: `user-list-menu-next-${nextPage}` });
+            if (totalPages > 1) {
+                menuPaging.push({ text: '>>', callback_data: `user-list-menu-next-${nextPage}` });
+            }
         } else if (pageNumber == totalPages) {
             menuPaging.push({ text: '<<', callback_data: `user-list-menu-prev-${prevPage}` });
             menuPaging.push({ text: Messages.buttonCancel, callback_data: 'user-list-menu-cancel' });
@@ -183,7 +185,7 @@ module.exports = function(Config, Messages) {
             menuPaging.push({ text: '>>', callback_data: `user-list-menu-next-${nextPage}` });
         }
 
-        userListMenu.push(menuPaging);    
+        userListMenu.push(menuPaging);
         const userListKeyboard = {
             inline_keyboard: userListMenu
         };

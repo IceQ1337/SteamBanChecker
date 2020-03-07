@@ -22,7 +22,7 @@ module.exports = function() {
 
     this.addUser = (userID, userName) => {
         return new Promise((resolve, reject) => {
-            this.db.users.insert({ chatID: userID, username: userName }, (err) => {
+            this.db.users.insert({ chatID: userID, Username: userName }, (err) => {
                 if (err) {
                     reject(err);
                 }
