@@ -12,6 +12,10 @@ In order to use this script, you need the following dependencies and tokens:
 - Telegram Bot Token: https://core.telegram.org/bots#6-botfather
 - Telegram Chat ID: [Retrieve your Telegram Chat ID](#retrieve-your-telegram-chat-id)
 
+### Dependencies
+- Linux: `fontconfig` or `libfontconfig`, depending on the distribution  
+  - If you don't get any screenshots, try `apt install phantomjs` instead
+
 ## Installation
 - Make sure you have the latest version of [Node.js](https://nodejs.org/) installed.
 - Download this repository as and unpack it wherever you like.
