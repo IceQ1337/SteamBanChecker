@@ -62,18 +62,15 @@ SteamAPI.on('ban', (type, player, users) => {
     if (typeCommunity) {
         Telegram.sendMessage(Utility.replaceMessageString(Messages.profileCommunityBanned, { '%PROFILEURL%': profileURL }), users);
     } else {
-        var message = -1;
-        switch(type) {
-            case 'vac':
-                message = Utility.replaceMessageString(Messages.profileVACBanned, { '%PROFILEURL%': profileURL });
-            case 'vac_multiple':
-                message = Utility.replaceMessageString(Messages.profileVACBannedAgain, { '%PROFILEURL%': profileURL });
-            case 'game_multiple':
-                message = Utility.replaceMessageString(Messages.profileGameBannedAgain, { '%PROFILEURL%': profileURL });
-            case 'game':
-                message = Utility.replaceMessageString(Messages.profileGameBanned, { '%PROFILEURL%': profileURL });
-            default:
-                break;
+        var message;
+        if (type == 'vac') {
+            message = Utility.replaceMessageString(Messages.profileVACBanned, { '%PROFILEURL%': profileURL });
+        } else if (type == 'vac_multiple') {
+            message = Utility.replaceMessageString(Messages.profileVACBannedAgain, { '%PROFILEURL%': profileURL });
+        } else if (type == 'game') {
+            message = Utility.replaceMessageString(Messages.profileGameBanned, { '%PROFILEURL%': profileURL });
+        } else if (type == 'game_multiple') {
+            message = Utility.replaceMessageString(Messages.profileGameBannedAgain, { '%PROFILEURL%': profileURL });
         }
 
         if (Config.Screenshot.saveScreenshot) {
