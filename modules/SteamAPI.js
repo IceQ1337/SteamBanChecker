@@ -69,10 +69,12 @@ class SteamAPI extends EventEmitter {
                                     _this.emit('ban', 'vac_multiple', player, profile.Users);
                                 }
     
-                                if (player.NumberOfGameBans > profile.NumberOfGameBans && profile.NumberOfGameBans > 0) {
-                                    _this.emit('ban', 'game_multiple', player, profile.Users);
-                                } else if (player.NumberOfGameBans > profile.NumberOfGameBans) {
-                                    _this.emit('ban', 'game', player, profile.Users);
+                                if (player.NumberOfGameBans > profile.NumberOfGameBans) {
+                                    if (profile.NumberOfGameBans > 0) {
+                                        _this.emit('ban', 'game_multiple', player, profile.Users);
+                                    } else {
+                                        _this.emit('ban', 'game', player, profile.Users);
+                                    }
                                 }
                             });
                         });
