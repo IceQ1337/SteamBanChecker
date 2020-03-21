@@ -32,7 +32,7 @@ function recursiveLoop() {
 
 function checkProfiles() {
     Database.getTrackedProfiles().then((profiles) => {
-        Utility.log('INFO', 'INDEX', 'checkProfiles', `Checking ${profiles.length} profile${profiles.length > 1 ? 's' : ''}.`);
+        //Utility.log('INFO', 'INDEX', 'checkProfiles', `Checking ${profiles.length} profile${profiles.length > 1 ? 's' : ''}.`);
         const queryChunks = Utility.chunkArray(profiles, 100);
         queryChunks.forEach((queryChunk) => {
             SteamAPI.queryProfileChunks(queryChunk);
