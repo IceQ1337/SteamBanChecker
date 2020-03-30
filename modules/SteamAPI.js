@@ -10,6 +10,8 @@ class SteamAPI extends EventEmitter {
         this.profileURL = 'https://steamcommunity.com/profiles/';
 
         this.profiles = Database.db.profiles;
+
+        this.rateLimited = false;
     }
 
     queryProfile(profile, chatID) {
@@ -38,6 +40,12 @@ class SteamAPI extends EventEmitter {
 
     queryProfileChunks(profiles) {
         const _this = this;
+
+        if (_this.rateLimited) {
+            _this.rateLimited = false;
+            _this.emit('info', 'queryProfileChunks', 'SKIPPING A QUERY AFTER AN HTTP 500 RESPONSE');
+            return;
+        }
 
         const apiURL = _this.apiURL + profiles.join();
         Request(apiURL, (err, response, body) => {
@@ -82,6 +90,9 @@ class SteamAPI extends EventEmitter {
                         _this.emit('error', 'queryProfileChunks', 'Invalid Response');
                     }
                 } else {
+                    if (response.statusCode === 500) {
+                        _this.rateLimited = true;
+                    }
                     _this.emit('error', 'queryProfileChunks', `Invalid Status Code: ${response.statusCode}`);
                 }
             } else {
