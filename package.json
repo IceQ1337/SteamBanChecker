@@ -1,6 +1,6 @@
 {
   "name": "steambanchecker",
-  "version": "2.0.1",
+  "version": "2.1.1",
   "description": "A simple Node.js script that periodically checks given Steam Profiles for new VAC, Game or Community Bans and informs you or a group via selected messenger.",
   "main": "server.js",
   "scripts": {
