@@ -1,7 +1,10 @@
 # Steam Ban Checker v2 (Work in Progress)
 [![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com)
 [![forthebadge](https://forthebadge.com/images/badges/uses-js.svg)](https://forthebadge.com)  
+
 A simple Node.js script that periodically checks given Steam Profiles for new VAC, Game or Community Bans and informs you or a group via Telegram Bot.
+
+## [Telegram Version](https://github.com/IceQ1337/SteamBanChecker) | [Discord Version](https://github.com/IceQ1337/SteamBanChecker_Discord)
 
 ## Requirements
 In order to use this script, you need the following dependencies and tokens:
