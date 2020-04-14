@@ -2,14 +2,14 @@ const Path = require('path');
 const NeDB = require('nedb');
 const Events = require('events');
 
-const ProfileDB = new NeDB({ filename: Path.join(__dirname, '../datastore/profiles.db'), autoload: true });
+const ProfileDB = new NeDB({ filename: Path.join(__dirname, '../../../datastore/telegram_profiles.db'), autoload: true });
 ProfileDB.ensureIndex({ fieldName: 'SteamID', unique: true }, (err) => {
     if (err) {
         console.error(new Error(`[${new Date().toUTCString()}] NEDB (ProfileDB.ensureIndex) > ${err}`));
     }
 });
 
-const UserDB = new NeDB({ filename: Path.join(__dirname, '../datastore/users.db'), autoload: true });
+const UserDB = new NeDB({ filename: Path.join(__dirname, '../../../datastore/telegram_users.db'), autoload: true });
 UserDB.ensureIndex({ fieldName: 'chatID', unique: true }, (err) => {
     if (err) {
         console.error(new Error(`[${new Date().toUTCString()}] NEDB (UserDB.ensureIndex) > ${err}`));
@@ -18,7 +18,7 @@ UserDB.ensureIndex({ fieldName: 'chatID', unique: true }, (err) => {
 
 module.exports = function() {
     this.db = { profiles: ProfileDB, users: UserDB };
-    this.eventEmitter = new Events.EventEmitter();
+    this.events = new Events.EventEmitter();
 
     this.addUser = (userID, userName) => {
         return new Promise((resolve, reject) => {
@@ -98,7 +98,7 @@ module.exports = function() {
     this.updateProfile = (steamID, updateData) => {
         this.db.profiles.update({ SteamID: steamID }, { $set: updateData }, {}, (err) => {
             if (err) {
-                _this.eventEmitter.emit('error', 'updateProfile', err);
+                _this.events.emit('error', 'updateProfile', err);
             }
         });
     };
