@@ -9,8 +9,6 @@ In order to use this script, you need the following dependencies and tokens:
 - Node.js: https://nodejs.org/en/  
   - Compatible with Version 12 and 13
 - Steam API Key: https://steamcommunity.com/dev/apikey  
-
-
 - Telegram Bot Token: https://core.telegram.org/bots#6-botfather
 - Telegram Chat ID: [Retrieve your Telegram Chat ID](#retrieve-your-telegram-chat-id)
 
