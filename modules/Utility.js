@@ -7,6 +7,10 @@ module.exports = function() {
         return new Date().toUTCString();
     };
 
+    this.toUTCString = (timestamp) => {
+        return new Date(timestamp).toUTCString();
+    };
+    
     this.log = (type, origin, func, err) => {
         console.log(`[${this.getUTC()}] [${type}] [${origin}] ${func} > ${err}`);
     };
@@ -34,7 +38,7 @@ module.exports = function() {
                 if (response.statusCode && response.statusCode === 200) {
                     XML.parseString(body, (err, result) => {
                         if (err) reject(err);
-                        resolve(result.profile.steamID64[0]);
+                        if (result && result.profile && result.profile.steamID64[0]) resolve(result.profile.steamID64[0]);
                     });
                 } else {
                     reject();
