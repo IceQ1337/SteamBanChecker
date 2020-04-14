@@ -1,7 +1,7 @@
 {
 	"General": {
-		"messengerType": "TELEGRAM",
-		"languageCode": "default",
+		"allowRequests": true,
+		"messages": "default",
 		"checkInterval": 10
 	},
 	"Steam": {
@@ -9,8 +9,7 @@
 	},
 	"Telegram": {
 		"botToken": "Telegram Bot Token",
-		"botOwnerID": "Telegram Chat ID",
-		"allowRequests": true
+		"masterChatID": "Telegram Chat ID"
 	},
 	"Screenshot": {
 		"saveScreenshot": true,
