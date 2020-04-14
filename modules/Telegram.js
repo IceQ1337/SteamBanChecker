@@ -4,7 +4,7 @@ const Events = require('events');
 module.exports = function(Config, Messages) {
     this.masterID = Config.Telegram.masterChatID;
     this.telegramBot = new TelegramAPI({ token: Config.Telegram.botToken, updates: { enabled: true, get_interval: 1000 } });
-    this.eventEmitter = new Events.EventEmitter();
+    this.events = new Events.EventEmitter();
 
     this.isMaster = (chatID) => {
         const _this = this;
@@ -13,7 +13,7 @@ module.exports = function(Config, Messages) {
 
     this.telegramBot.on('polling_error', (err) => {
         const _this = this;
-        _this.eventEmitter.emit('error', 'polling_error', err);
+        _this.events.emit('error', 'polling_error', err);
     });
 
     this.telegramBot.on('message', (message) => {
@@ -31,16 +31,16 @@ module.exports = function(Config, Messages) {
             const messageText = message.text.toLowerCase();
             
             if (messageText == '/users' && userID == _this.masterID) {
-                _this.eventEmitter.emit('command_users', userID, chatID);
+                _this.events.emit('command_users', userID, chatID);
             } else if (messageText.startsWith('/add')) {
                 const argument = messageText.replace('/add ', '');
-                _this.eventEmitter.emit('command_add', userID, chatID, argument);
+                _this.events.emit('command_add', userID, chatID, argument);
             } else if (messageText == '/stats') {
-                _this.eventEmitter.emit('command_stats', userID, chatID);
+                _this.events.emit('command_stats', userID, chatID);
             } else if (messageText == '/start') {
-                _this.eventEmitter.emit('command_start', userID, chatID);
+                _this.events.emit('command_start', userID, chatID);
             } else if (messageText == '/request') {
-                _this.eventEmitter.emit('command_request', userID, chatID, userName);
+                _this.events.emit('command_request', userID, chatID, userName);
             }
         }
     });
@@ -53,7 +53,7 @@ module.exports = function(Config, Messages) {
         const messageText = message.message.text;
         const callbackData = message.data;
 
-        _this.eventEmitter.emit('callback', messageText, messageID, chatID, callbackData);
+        _this.events.emit('callback', messageText, messageID, chatID, callbackData);
     });
 
     this.sendMessageFinal = (messageText, chatID) => {
@@ -64,7 +64,7 @@ module.exports = function(Config, Messages) {
             text: messageText,
             parse_mode: 'Markdown'
         }).catch((err) => {
-            _this.eventEmitter.emit('error', 'sendMessageFinal', err);
+            _this.events.emit('error', 'sendMessageFinal', err);
         }); 
     };
 
@@ -76,7 +76,7 @@ module.exports = function(Config, Messages) {
             caption: photoCaption,
             photo: photoPath
         }).catch((err) => {
-            _this.eventEmitter.emit('error', 'sendPhotoFinal', err);
+            _this.events.emit('error', 'sendPhotoFinal', err);
         }); 
     };
 
@@ -112,7 +112,7 @@ module.exports = function(Config, Messages) {
             text: messageText,
             reply_markup: JSON.stringify(inlineKeyboard)
         }).catch((err) => {
-            _this.eventEmitter.emit('error', 'sendMessageKeyboard', err);
+            _this.events.emit('error', 'sendMessageKeyboard', err);
         });      
     };
 
@@ -125,7 +125,7 @@ module.exports = function(Config, Messages) {
             text: messageText,
             reply_markup: JSON.stringify(inlineKeyboard)
         }).catch((err) => {
-            _this.eventEmitter.emit('error', 'editMessageText', err);
+            _this.events.emit('error', 'editMessageText', err);
         });       
     };
 

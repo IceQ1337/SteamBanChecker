@@ -18,7 +18,7 @@ UserDB.ensureIndex({ fieldName: 'chatID', unique: true }, (err) => {
 
 module.exports = function() {
     this.db = { profiles: ProfileDB, users: UserDB };
-    this.eventEmitter = new Events.EventEmitter();
+    this.events = new Events.EventEmitter();
 
     this.addUser = (userID, userName) => {
         return new Promise((resolve, reject) => {
@@ -98,7 +98,7 @@ module.exports = function() {
     this.updateProfile = (steamID, updateData) => {
         this.db.profiles.update({ SteamID: steamID }, { $set: updateData }, {}, (err) => {
             if (err) {
-                _this.eventEmitter.emit('error', 'updateProfile', err);
+                _this.events.emit('error', 'updateProfile', err);
             }
         });
     };

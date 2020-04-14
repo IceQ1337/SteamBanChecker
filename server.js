@@ -98,17 +98,17 @@ SteamAPI.on('playerdata', (playerData, chatID) => {
     });
 });
 
-Telegram.eventEmitter.on('error', (func, err) => {
+Telegram.events.on('error', (func, err) => {
     Utility.log('ERROR', 'Telegram', func, err);
 });
 
-Telegram.eventEmitter.on('command_start', (userID, chatID) => {
+Telegram.events.on('command_start', (userID, chatID) => {
     if (userID == chatID) {
         Telegram.sendMessage(Messages.userStartInfo, chatID);
     }
 });
 
-Telegram.eventEmitter.on('command_add', (userID, chatID, argument) => {
+Telegram.events.on('command_add', (userID, chatID, argument) => {
     Database.getUsers().then((users) => {
         const userIDs = [];
         users.forEach((user) => {
@@ -139,7 +139,7 @@ Telegram.eventEmitter.on('command_add', (userID, chatID, argument) => {
     });
 });
 
-Telegram.eventEmitter.on('command_users', (userID, chatID) => {
+Telegram.events.on('command_users', (userID, chatID) => {
     if (Telegram.isMaster(userID)) {
         if (userID == chatID) {
             Database.getUsers().then((users) => {
@@ -157,7 +157,7 @@ Telegram.eventEmitter.on('command_users', (userID, chatID) => {
     }
 });
 
-Telegram.eventEmitter.on('command_request', (userID, chatID, userName) => {
+Telegram.events.on('command_request', (userID, chatID, userName) => {
     if (userID == chatID) {
         if (Config.General.allowRequests) {
             if (!Telegram.isMaster(chatID)) {
@@ -187,7 +187,7 @@ Telegram.eventEmitter.on('command_request', (userID, chatID, userName) => {
     }
 });
 
-Telegram.eventEmitter.on('command_stats', (userID, chatID) => {
+Telegram.events.on('command_stats', (userID, chatID) => {
     Database.getUsers().then((users) => {
         const userIDs = [];
         users.forEach((user) => {
@@ -212,7 +212,7 @@ Telegram.eventEmitter.on('command_stats', (userID, chatID) => {
     });
 });
 
-Telegram.eventEmitter.on('callback', (messageText, messageID, chatID, callbackData) => {
+Telegram.events.on('callback', (messageText, messageID, chatID, callbackData) => {
     if (callbackData.startsWith('user-accept')) {
         const userData = callbackData.split('-');
         const userID = parseInt(userData[2]);
@@ -258,6 +258,6 @@ Telegram.eventEmitter.on('callback', (messageText, messageID, chatID, callbackDa
 });
 
 /* Database Event Listeners */
-Database.eventEmitter.on('error', (func, err) => {
+Database.events.on('error', (func, err) => {
     Utility.log('ERROR', 'Database', func, err);
 });
