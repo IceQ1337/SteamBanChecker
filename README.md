@@ -21,14 +21,14 @@ In order to use this script, you need the following dependencies and tokens:
 - Download this repository as and unpack it wherever you like.
 - Go into the `configs` folder and rename `config.json.example` to `config.json`
 - Edit `config.json` and fill in your **Steam API Key**, **Telegram Bot Token** and **Telegram Chat ID**
-- Type `npm install` into your console of choice to install all necessary Node.js Dependencies
+- Type `npm install` into your console of choice to install all necessary Node.js dependencies
 - Type `npm start` or `node server.js` to start the script.
-  - To find out how to run the script permanently on a server you should check out [forever](https://github.com/foreversd/forever)
+  - To find out how to run the script permanently on a server you should check out [forever](https://github.com/foreversd/forever).
 
 **Make sure you have everything set up properly and your config is valid without missing information!**  
 
 ## Updating
-In most cases, files only need to be overwritten, renamed or moved, but this project has **no guaranteed backward compatibility** and if the file structure changes during an update, a local installation must be manually adjusted. The only files that will remain compatible at all times are database files.
+In most cases, files only need to be overwritten, renamed or moved, but this project has **no guaranteed backward compatibility** and if the file structure changes during an update, a local installation must be manually adjusted. The only files that will remain compatible at all times are database files if not otherwise stated.
 
 ## Configuration
 ```Javascript
@@ -52,8 +52,13 @@ In most cases, files only need to be overwritten, renamed or moved, but this pro
 }
 ```
 
+#### Profile Screenshots
+**This only applies to displayed bans like VAC and Game Bans.**  
+- If `saveScreenshot` is enabled, a profile screenshot will be taken as soon as a profile gets banned.
+- If `sendScreenshot` is enabled, the screenshot will also be sent via Telegram Bot.
+
 ## Usage
-### Adding Profiles
+#### Adding Profiles
 - Use `/add <steamID64|profileURL>` to add profiles to the list.
   - Examples:
     - `/add 12345678912345678`
@@ -62,25 +67,20 @@ In most cases, files only need to be overwritten, renamed or moved, but this pro
 
 To get the steamID64 or URL of a profile you can use websites like [STEAMID I/O](https://steamid.io/).  
 
-### Adding Users
+#### Adding Users
 While `allowRequests` is enabled (true), everyone can `/request` access to the script and you can either accept or decline the request. Users then can `/add` their own profiles, but you will not be notified about this.
 
-### Manage Users
+#### Manage Users
 - Type `/users` to receive a list of current users.
 - Tap on the user you want to edit. The rest is relatively self-explanatory.
 
-### View Statistics
+#### View Statistics
 Type `/stats` to view global and personal statistics.
 
 ### Groups and Supergroups
 If you **disable** the [Privacy Mode](https://core.telegram.org/bots#privacy-mode) for your Telegram Bot, you can also use it in groups and supergroups. Users in the group will still need access to the script in order to use it, but if they do have access, the profile will be checked for the entire group and can not be added again.
 
-### Profile Screenshots
-**This only applies to displayed bans like VAC and Game Bans.**  
-- If `saveScreenshot` is enabled, a profile screenshot will be taken as soon as a profile gets banned.
-- If `sendScreenshot` is enabled, the screenshot will also be sent via Telegram Bot.
-
-### How It Operates
+## Functionality
 - The script will check every profile that gets added to the list once to get its initial data.
   - This is because you most-likely have a reason to track it for future bans ignoring old ones.
 - While running, the script will check profiles every `checkInterval` minutes. (Default: 10)
@@ -91,7 +91,9 @@ If you **disable** the [Privacy Mode](https://core.telegram.org/bots#privacy-mod
 
 All data is stored in readable database files called `profiles.db` and `users.db`.
 
-## Retrieve your Telegram Chat ID
+## Additional Information
+
+### Retrieve your Telegram Chat ID
 In order to retrieve your unique Telegram Chat ID, do as follows:
 
 **Easy Method**
@@ -105,7 +107,7 @@ In order to retrieve your unique Telegram Chat ID, do as follows:
 - Search for the `id` field within the `from` object of your message response.
   - Absolute Path: `result[arrayIndex].message.from.id`
 
-## Contributing
+### Contributing
 There are currently no contributing guidelines, but I am open to any kind of improvements.  
 In order to contribute to the project, please follow the **GitHub Standard Fork & Pull Request Workflow**
 
@@ -115,7 +117,7 @@ In order to contribute to the project, please follow the **GitHub Standard Fork 
 - **Push** your work to your own fork.
 - Submit a **Pull Request** so I can review your changes
 
-## Used Node.js Modules
+### Used Node.js Modules
 - [Node.js Telegram Bot API](https://github.com/mast/telegram-bot-api)
 - [NeDB](https://github.com/louischatriot/nedb)
 - [Request](https://github.com/request/request)
@@ -123,9 +125,9 @@ In order to contribute to the project, please follow the **GitHub Standard Fork 
 - [XML2JS](https://github.com/Leonidas-from-XIV/node-xml2js)
 - [SteamID](https://github.com/DoctorMcKay/node-steamid)
 
-## Donating
+### Donating
 If you find this script useful, you can support me by donating items via steam.  
 [Steam Trade Link](https://steamcommunity.com/tradeoffer/new/?partner=169517256&token=77MTawmP)
 
-## License
+### License
 [MIT](https://github.com/IceQ1337/SteamBanChecker/blob/master/LICENSE)
