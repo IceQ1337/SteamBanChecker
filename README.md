@@ -21,7 +21,7 @@ In order to use this script, you need the following dependencies and tokens:
 
 ## Installation
 - Make sure you have the latest version of [Node.js](https://nodejs.org/) installed.
-- Download this repository as and unpack it wherever you like.
+- Download this repository as [ZIP](https://github.com/IceQ1337/SteamBanChecker/archive/master.zip) and unpack it wherever you like.
 - Go into the `configs` folder and rename `config.json.example` to `config.json`
 - Edit `config.json` and fill in your **Steam API Key**, **Telegram Bot Token** and **Telegram Chat ID**
 - Type `npm install` into your console of choice to install all necessary Node.js dependencies
