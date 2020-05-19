@@ -57,7 +57,7 @@ module.exports = function() {
                 var steamID = argument.match(/[0-9]{17}/gi)[0];
                 var realID = new SteamID(steamID);
                 if (realID.isValid()) {
-                    resolve(argument);
+                    resolve(steamID);
                 } else {
                     resolve();
                 }
