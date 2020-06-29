@@ -27,7 +27,7 @@
     "nedb": "^1.8.0",
     "request": "^2.88.2",
     "steamid": "^1.1.3",
-    "telegram-bot-api": "^1.3.4",
+    "telegram-bot-api": "^2.0.0",
     "webshot-node": "^0.18.2",
     "xml2js": "^0.4.23"
   }
