@@ -17,10 +17,16 @@ const Screenshot_Module = require('./modules/Screenshot');
 const Screenshot = new Screenshot_Module();
 
 Telegram.telegramBot.getMe().then(() => {
-    recursiveLoop();
+    Telegram.telegramBot.setMessageProvider(Telegram.telegramMessageProvider);
+    Telegram.telegramBot.start().then(() => {
+        Utility.log('INFO', 'Telegram', 'start', 'Telegram Bot Started.');
+        recursiveLoop();
 
-    // Cannot use setInterval() because of NodeJS Timeout "Bug"
-    // const loop = setInterval(recursiveLoop, ((1000 * 60) * (Config.General.checkInterval > 0 ? Config.General.checkInterval : 10)));
+        // Cannot use setInterval() because of NodeJS Timeout "Bug"
+        // const loop = setInterval(recursiveLoop, ((1000 * 60) * (Config.General.checkInterval > 0 ? Config.General.checkInterval : 10)));
+    }).catch((err) => {
+        Utility.log('ERROR', 'Telegram', 'start', err);
+    });
 }).catch((err) => {
     Utility.log('ERROR', 'Telegram', 'getMe', err);
 });

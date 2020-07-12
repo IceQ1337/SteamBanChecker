@@ -1,9 +1,11 @@
 const TelegramAPI = require('telegram-bot-api');
 const Events = require('events');
+const FS = require('fs');
 
 module.exports = function(Config, Messages) {
     this.masterID = Config.Telegram.masterChatID;
     this.telegramBot = new TelegramAPI({ token: Config.Telegram.botToken, updates: { enabled: true, get_interval: 1000 } });
+    this.telegramMessageProvider = new TelegramAPI.GetUpdateMessageProvider();
     this.events = new Events.EventEmitter();
 
     this.isMaster = (chatID) => {
@@ -11,12 +13,17 @@ module.exports = function(Config, Messages) {
         return chatID == _this.masterID;
     };
 
-    this.telegramBot.on('polling_error', (err) => {
-        const _this = this;
-        _this.events.emit('error', 'polling_error', err);
+    this.telegramBot.on('update', (update) => {
+        if (update.message) {
+            this.telegramBot.onMessage(update.message);
+        }
+
+        if (update.callback_query) {
+            this.telegramBot.onCallbackQuery(update.callback_query);
+        }
     });
 
-    this.telegramBot.on('message', (message) => {
+    this.telegramBot.onMessage = (message) => {
         const _this = this;
 
         const chat = message.chat;
@@ -43,9 +50,9 @@ module.exports = function(Config, Messages) {
                 _this.events.emit('command_request', userID, chatID, userName);
             }
         }
-    });
+    };
 
-    this.telegramBot.on('inline.callback.query', (message) => {
+    this.telegramBot.onCallbackQuery = (message) => {
         const _this = this;
 
         const chatID = message.message.chat.id;
@@ -54,7 +61,7 @@ module.exports = function(Config, Messages) {
         const callbackData = message.data;
 
         _this.events.emit('callback', messageText, messageID, chatID, callbackData);
-    });
+    };
 
     this.sendMessageFinal = (messageText, chatID) => {
         const _this = this;
@@ -74,7 +81,7 @@ module.exports = function(Config, Messages) {
         _this.telegramBot.sendPhoto({
             chat_id: chatID,
             caption: photoCaption,
-            photo: photoPath
+            photo: FS.createReadStream(photoPath)
         }).catch((err) => {
             _this.events.emit('error', 'sendPhotoFinal', err);
         }); 
@@ -110,7 +117,7 @@ module.exports = function(Config, Messages) {
         _this.telegramBot.sendMessage({
             chat_id: chatID,
             text: messageText,
-            reply_markup: JSON.stringify(inlineKeyboard)
+            reply_markup: inlineKeyboard
         }).catch((err) => {
             _this.events.emit('error', 'sendMessageKeyboard', err);
         });      
@@ -123,7 +130,7 @@ module.exports = function(Config, Messages) {
             chat_id: chatID,
             message_id: messageID,
             text: messageText,
-            reply_markup: JSON.stringify(inlineKeyboard)
+            reply_markup: inlineKeyboard
         }).catch((err) => {
             _this.events.emit('error', 'editMessageText', err);
         });       
