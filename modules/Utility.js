@@ -70,6 +70,10 @@ module.exports = function() {
                 if (url.charAt(url.length - 1) == '/') {
                     url = url.substring(0, url.length -1);
                 }
+				
+				if (url.includes('/')) {
+					url = url.split('/')[0];
+				}
 
                 _this.resolveCustomURL(url).then((steamID) => {
                     if (steamID) {
