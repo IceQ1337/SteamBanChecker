@@ -38,7 +38,11 @@ module.exports = function() {
                 if (response.statusCode && response.statusCode === 200) {
                     XML.parseString(body, (err, result) => {
                         if (err) reject(err);
-                        if (result && result.profile && result.profile.steamID64[0]) resolve(result.profile.steamID64[0]);
+                        if (result && result.profile && result.profile.steamID64[0]) {
+                            resolve(result.profile.steamID64[0]);
+                        } else {
+                            resolve();
+                        }
                     });
                 } else {
                     reject();
@@ -68,9 +72,13 @@ module.exports = function() {
                 }
 
                 _this.resolveCustomURL(url).then((steamID) => {
-                    var realID = new SteamID(steamID);
-                    if (realID.isValid()) {
-                        resolve(steamID);
+                    if (steamID) {
+                        var realID = new SteamID(steamID);
+                        if (realID.isValid()) {
+                            resolve(steamID);
+                        } else {
+                            resolve();
+                        }
                     } else {
                         resolve();
                     }

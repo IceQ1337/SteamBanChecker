@@ -134,7 +134,7 @@ Telegram.events.on('command_add', (userID, chatID, argument) => {
                         Utility.log('ERROR', 'Database', 'getProfile', err);
                     });
                 } else {
-                    Telegram.sendMessage('Invalid Argument.\nUsage: /add <steamID64|profileURL>', chatID);
+                    Telegram.sendMessage('Invalid Argument/Profile.\nUsage: /add <steamID64|profileURL>', chatID);
                 }
             }).catch((err) => {
                 Utility.log('ERROR', 'Utility', 'isValidSteamID', err);
