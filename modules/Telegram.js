@@ -40,7 +40,7 @@ module.exports = function(Config, Messages) {
             if (messageText == '/users' && userID == _this.masterID) {
                 _this.events.emit('command_users', userID, chatID);
             } else if (messageText.startsWith('/add')) {
-                const argument = messageText.replace('/add ', '').replace(/\s+/g,'');
+                const argument = messageText.replace('/add', '').replace(/\s+/g,'');
                 _this.events.emit('command_add', userID, chatID, argument);
             } else if (messageText == '/stats') {
                 _this.events.emit('command_stats', userID, chatID);
