@@ -8,11 +8,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/IceQ1337/SteamBanChecker.git"
+    "url": "git+https://github.com/IceQ1337-CSGO/SteamBanChecker.git"
   },
   "keywords": [
     "steam",
-    "ban",
+    "csgo",
     "telegram",
     "vac",
     "overwatch"
@@ -20,9 +20,9 @@
   "author": "IceQ1337",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/IceQ1337/SteamBanChecker/issues"
+    "url": "https://github.com/IceQ1337-CSGO/SteamBanChecker/issues"
   },
-  "homepage": "https://github.com/IceQ1337/SteamBanChecker#readme",
+  "homepage": "https://github.com/IceQ1337-CSGO/SteamBanChecker#readme",
   "dependencies": {
     "nedb": "^1.8.0",
     "request": "^2.88.2",
