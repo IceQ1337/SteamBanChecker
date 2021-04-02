@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/IceQ1337-CSGO/SteamBanChecker.git"
+    "url": "git+https://github.com/IceQ1337/SteamBanChecker.git"
   },
   "keywords": [
     "steam",
@@ -20,9 +20,9 @@
   "author": "IceQ1337",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/IceQ1337-CSGO/SteamBanChecker/issues"
+    "url": "https://github.com/IceQ1337/SteamBanChecker/issues"
   },
-  "homepage": "https://github.com/IceQ1337-CSGO/SteamBanChecker#readme",
+  "homepage": "https://github.com/IceQ1337/SteamBanChecker#readme",
   "dependencies": {
     "nedb": "^1.8.0",
     "request": "^2.88.2",

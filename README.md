@@ -4,7 +4,7 @@
 
 A simple Node.js script that periodically checks given Steam Profiles for new VAC, Game or Community Bans and informs you or a group via Telegram Bot.
 
-## [Telegram Version](https://github.com/IceQ1337-CSGO/SteamBanChecker) | [Discord Version](https://github.com/IceQ1337-CSGO/SteamBanChecker_Discord)
+## [Telegram Version](https://github.com/IceQ1337/SteamBanChecker) | [Discord Version](https://github.com/IceQ1337/SteamBanChecker_Discord)
 
 ## Requirements
 In order to use this script, you need the following dependencies and tokens:
@@ -21,7 +21,7 @@ In order to use this script, you need the following dependencies and tokens:
 
 ## Installation
 - Make sure you have the latest version of [Node.js](https://nodejs.org/) installed.
-- Download this repository as [ZIP](https://github.com/IceQ1337-CSGO/SteamBanChecker/archive/master.zip) and unpack it wherever you like.
+- Download this repository as [ZIP](https://github.com/IceQ1337/SteamBanChecker/archive/master.zip) and unpack it wherever you like.
 - Go into the `configs` folder and rename `config.json.example` to `config.json`
 - Edit `config.json` and fill in your **Steam API Key**, **Telegram Bot Token** and **Telegram Chat ID**
 - Type `npm install` into your console of choice to install all necessary Node.js dependencies
@@ -133,4 +133,4 @@ If you find this script useful, you can support me by donating items via steam.
 [Steam Trade Link](https://steamcommunity.com/tradeoffer/new/?partner=169517256&token=77MTawmP)
 
 ### License
-[MIT](https://github.com/IceQ1337-CSGO/SteamBanChecker/blob/master/LICENSE)
+[MIT](https://github.com/IceQ1337/SteamBanChecker/blob/master/LICENSE)
