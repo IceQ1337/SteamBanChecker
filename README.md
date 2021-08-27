@@ -4,6 +4,9 @@
 
 A simple Node.js script that periodically checks given Steam Profiles for new VAC, Game or Community Bans and informs you or a group via Telegram Bot.
 
+:warning:| **WARNING: THIS PROJECT IS NO LONGER ACTIVELY MAINTAINED** 
+:---: | :---
+
 ## [Telegram Version](https://github.com/IceQ1337/SteamBanChecker) | [Discord Version](https://github.com/IceQ1337/SteamBanChecker_Discord)
 
 ## Requirements
