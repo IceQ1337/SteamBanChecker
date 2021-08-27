@@ -1,4 +1,4 @@
-# Steam Ban Checker v2 (Work in Progress)
+# Steam Ban Checker v2
 [![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com)
 [![forthebadge](https://forthebadge.com/images/badges/uses-js.svg)](https://forthebadge.com)  
 
